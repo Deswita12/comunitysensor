@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Mari Mengudara! | SensorKita Tangerang</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#695d46",
+                        "surface-dim": "#dcd9d9",
+                        "on-primary-fixed": "#002108",
+                        "on-secondary-fixed": "#231a08",
+                        "surface-container": "#f0eded",
+                        "on-error-container": "#93000a",
+                        "primary": "#416744",
+                        "outline": "#727970",
+                        "tertiary-fixed-dim": "#9ecfd1",
+                        "on-secondary-container": "#6d614a",
+                        "on-tertiary-container": "#003a3c",
+                        "primary-fixed-dim": "#a7d1a6",
+                        "inverse-primary": "#a7d1a6",
+                        "tertiary-container": "#73a4a6",
+                        "inverse-on-surface": "#f3f0f0",
+                        "on-secondary-fixed-variant": "#504530",
+                        "tertiary-fixed": "#b9ecee",
+                        "on-surface-variant": "#424941",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#f2e0c3",
+                        "on-primary-fixed-variant": "#294f2e",
+                        "primary-container": "#7da67e",
+                        "outline-variant": "#c2c8be",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-bright": "#fbf9f8",
+                        "on-surface": "#1b1c1c",
+                        "surface-variant": "#e4e2e1",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#002021",
+                        "background": "#fbf9f8",
+                        "surface-container-high": "#eae8e7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#1a4e50",
+                        "surface": "#fbf9f8",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#153b1c",
+                        "primary-fixed": "#c2eec1",
+                        "inverse-surface": "#303030",
+                        "secondary-container": "#efdec0",
+                        "on-background": "#1b1c1c",
+                        "surface-container-highest": "#e4e2e1",
+                        "error": "#ba1a1a",
+                        "tertiary": "#356668",
+                        "surface-tint": "#416744",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#d5c5a8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-max-width": "1140px",
+                        "card-padding": "24px",
+                        "section-gap-mobile": "40px",
+                        "section-gap-desktop": "80px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.7", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+    
+    <link href="assets/css/style.css" rel="stylesheet" />
+
+    <script>
+        (function () {
+            if (localStorage.getItem('sk-theme') === 'dark') {
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
+</head>
+
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+
+     <header class="bg-surface sticky top-0 z-50 shadow-sm w-full h-16 flex items-center">
+        <div
+            class="w-full max-w-container-max-width mx-auto px-4 md:px-card-padding flex justify-between items-center relative">
+
+            <div class="flex items-center gap-2">
+                <span class="font-display-lg text-headline-md text-primary tracking-tight cursor-pointer"
+                       onclick="window.location.href='../../index.html'">SensorKita</span>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-6">
+                <div class="relative group">
+                    <button id="desktop-data-btn"
+                        class="font-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 py-2">
+                        Data
+                        <span class="material-symbols-outlined transition-transform"
+                            id="data-arrow">keyboard_arrow_down</span>
+                    </button>
+                    <div id="desktop-dropdown"
+                        class="absolute left-0 mt-1 w-48 bg-surface rounded-xl shadow-lg border border-outline-variant py-2 hidden z-50">
+                        <button onclick="window.location.href='data.html'"
+                            class="w-full text-left px-4 py-2 text-sm font-label-caps text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all">
+                            Dashboard
+                        </button>
+                        <button onclick="switchSubTab('info')"
+                            class="w-full text-left px-4 py-2 text-sm font-label-caps text-primary hover:bg-surface-container transition-all">
+                            Info
+                        </button>
+
+                    </div>
+                </div>
+                <a class="font-label-caps text-primary border-b-2 border-primary py-1 nav-link active-page"
+                    href="panduan.html" data-page="panduan">Panduan</a>
+                <a class="font-label-caps text-on-surface-variant hover:text-primary transition-colors py-1 nav-link"
+                    href="komunitas.html" data-page="komunitas">Komunitas</a>
+            </nav>
+
+            <div class="flex items-center gap-2 md:gap-4">
+                <!-- FAQ icon — scroll ke bagian FAQ di panduan.html -->
+                <a href="panduan.html#faq"
+                    class="material-symbols-outlined text-on-surface-variant cursor-pointer p-1 rounded-full hover:bg-surface-container transition-colors"
+                    title="FAQ">help</a>
+                <span onclick="openSettings()"
+                    class="material-symbols-outlined text-on-surface-variant cursor-pointer p-1 rounded-full hover:bg-surface-container transition-colors">settings</span>
+                <!-- Hubungi Kami — WhatsApp -->
+                <a href="https://wa.me/6287775881409" target="_blank" rel="noopener noreferrer"
+                    class="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity text-sm font-label-caps">
+                    <span class="material-symbols-outlined text-base">chat</span>
+                    <span>Hubungi Kami</span>
+                </a>
+            </div>
+
+        
+<div id="mobile-menu"
+    class="absolute top-16 left-0 right-0 bg-surface border-b border-outline-variant shadow-md p-4 hidden flex-col gap-4 md:hidden z-50">
+                <div>
+                    <button id="mobile-data-btn"
+                        class="w-full flex justify-between items-center font-label-caps text-on-surface-variant py-2">
+                        <span href="assets/main/data.html">Data</span>
+                        <span class="material-symbols-outlined transition-transform"
+                            id="mobile-data-arrow">keyboard_arrow_down</span>
+                    </button>
+                    <div id="mobile-data-sub"
+                        class="hidden pl-4 flex flex-col gap-2 mt-1 border-l-2 border-outline-variant">
+                        <button onclick="window.location.href='data.html'"
+                            class="text-left font-label-caps text-sm text-on-surface-variant hover:text-primary py-2">
+                            Dashboard
+                        </button>
+                        <button onclick="switchSubTab('info')"
+                            class="w-full text-left px-4 py-2 text-sm font-label-caps text-primary hover:bg-surface-container transition-all">
+                            Info
+                        </button>
+                    </div>
+                </div>
+                <div>
+                <a class="font-label-caps text-primary py-2 border-b border-outline-variant nav-link active-page"
+                    href="panduan.html" data-page="panduan">Panduan</a>
+                <a class="font-label-caps text-on-surface-variant hover:text-primary py-2 nav-link"
+                    href="komunitas.html" data-page="komunitas">Komunitas</a>
+                </div>
+        </div>
+    </header>
+    
+    <div id="main-content-wrapper">
+        <section class="relative py-section-gap-mobile md:py-section-gap-desktop overflow-hidden">
+            <div class="absolute top-0 right-0 -z-10 opacity-20"></div>
+            <div class="max-w-container-max-width mx-auto px-4 md:px-card-padding">
+                <div class="max-w-[720px]">
+                    <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">
+                        Mari Mengudara! <br />
+                        <span class="text-secondary">Buat Sensor Kualitas Udara Mandiri Kabupaten Tangerang</span>
+                    </h1>
+                    <p class="font-body-lg text-on-surface-variant mb-10">
+                        Wujudkan udara yang lebih bersih untuk keluarga Anda. Mulailah perjalanan merakit alat deteksi
+                        polusi udara sederhana dengan bantuan panduan langkah demi langkah kami.
+                    </p>
+                    <div class="flex flex-wrap gap-4 mb-12">
+                        <button
+                            class="bg-primary text-on-primary font-label-caps px-8 py-4 rounded-full shadow-lg hover:opacity-90 active:scale-95 transition-all flex items-center gap-2 w-full sm:w-auto justify-center"
+                            onclick="scrollToWizard()">
+                            Mulai Merakit Sekarang <span class="material-symbols-outlined">arrow_downward</span>
+                        </button>
+                        <a href="data.html"
+                            class="border-2 border-primary text-primary font-label-caps px-8 py-4 rounded-full hover:bg-primary-container/10 transition-colors w-full sm:w-auto justify-center flex items-center">
+                            Pelajari Lebih Lanjut
+                        </a>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+                    <div
+                        class="bg-secondary-container p-6 rounded-xl border border-outline-variant flex flex-col sm:flex-row items-start gap-4">
+                        <div class="bg-on-secondary-container text-secondary-container p-3 rounded-lg flex-shrink-0">
+                            <span class="material-symbols-outlined">coronavirus</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline-md text-on-secondary-container mb-2">Deteksi Polusi & DBD</h3>
+                            <p class="text-on-secondary-fixed-variant">Sensor kami membantu memetakan area rawan
+                                kelembapan tinggi yang disukai nyamuk Aedes aegypti.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-primary-container/20 p-6 rounded-xl border border-outline-variant flex flex-col sm:flex-row items-start gap-4">
+                        <div class="bg-primary text-on-primary p-3 rounded-lg flex-shrink-0">
+                            <span class="material-symbols-outlined">smoke_free</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline-md text-primary mb-2">Deteksi Asap & Karbon</h3>
+                            <p class="text-on-primary-fixed-variant">Cegah bahaya pernapasan sedini mungkin dengan
+                                notifikasi langsung dari perangkat mandiri Anda.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main class="max-w-[840px] mx-auto px-4 pb-24" id="wizard-section">
+            <div class="sticky top-16 z-40 bg-background pt-4 pb-8">
+                <div class="flex justify-between mb-4 px-2">
+                    <span class="font-label-caps text-primary text-xs sm:text-sm" id="step-title">Langkah 1: Persiapan
+                        Alat</span>
+                    <span class="font-label-caps text-on-surface-variant text-xs sm:text-sm" id="step-counter">1 dari
+                        6</span>
+                </div>
+                <!-- Garis progress diganti jadi step indicator yang bisa diklik -->
+                <div class="flex items-center gap-1.5 w-full" id="step-indicators">
+                    <button onclick="goToStep(1)" id="ind-1"
+                        class="step-ind flex-1 h-2 rounded-full transition-all bg-primary hover:opacity-80 cursor-pointer"></button>
+                    <button onclick="goToStep(2)" id="ind-2"
+                        class="step-ind flex-1 h-2 rounded-full transition-all bg-surface-container hover:bg-outline-variant cursor-pointer"></button>
+                    <button onclick="goToStep(3)" id="ind-3"
+                        class="step-ind flex-1 h-2 rounded-full transition-all bg-surface-container hover:bg-outline-variant cursor-pointer"></button>
+                    <button onclick="goToStep(4)" id="ind-4"
+                        class="step-ind flex-1 h-2 rounded-full transition-all bg-surface-container hover:bg-outline-variant cursor-pointer"></button>
+                    <button onclick="goToStep(5)" id="ind-5"
+                        class="step-ind flex-1 h-2 rounded-full transition-all bg-surface-container hover:bg-outline-variant cursor-pointer"></button>
+                    <button onclick="goToStep(6)" id="ind-6"
+                        class="step-ind flex-1 h-2 rounded-full transition-all bg-surface-container hover:bg-outline-variant cursor-pointer"></button>
+                </div>
+            </div>
+
+            <div
+                class="bg-surface-container-low rounded-3xl p-4 sm:p-6 md:p-10 shadow-sm border border-outline-variant relative">
+
+                <div class="step-content block" id="step-1">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
+                        <img alt="Coding Cat"
+                            class="w-16 h-16 rounded-full bg-white p-1 border-2 border-primary-container flex-shrink-0"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvp-CyD3nb4-rWzdtosJpRjOcfFIEWYdpFKbz-tcOFegoB5-qNbiQl9ycoJ4Ml1wYcgePPB5MDSD1NvXqNDgbTCZe-gaZGmcQolLRrXMY98bO7wGngfNLCSyNULe52LSADexPOX3TxtqGrRtQRv_7irHzmCG7WpOYIJH097gQqDeH1-Vz1Q6qpB0FIERoKgVb_vGAQ2O0y9YcVGkQXJvqeCydtQA2BBFkJIqUHvbtEehTpnzsXdoTO5rT6gA8r6z6aiVEhG4eNnA" />
+                        <div class="bg-secondary-container p-4 rounded-2xl rounded-tl-none relative w-full">
+                            <p class="font-body-md text-on-secondary-container italic text-sm sm:text-base">"Halo! Saya
+                                Oyen. Sebelum mulai, pastikan meja kerjamu rapi dan semua alat sudah siap ya!"</p>
+                        </div>
+                    </div>
+                    <h2 class="font-headline-md text-on-surface mb-6">Daftar Alat & Bahan</h2>
+                    <div class="flex flex-wrap gap-2 mb-8 bg-surface-container rounded-lg p-1 w-fit">
+                        <button
+                            class="px-4 sm:px-6 py-2 rounded-md font-label-caps text-xs sm:text-sm bg-primary text-on-primary transition-all"
+                            id="btn-basic" onclick="togglePackage('basic')">Paket Basic</button>
+                        <button
+                            class="px-4 sm:px-6 py-2 rounded-md font-label-caps text-xs sm:text-sm text-on-surface-variant hover:bg-surface-variant transition-all"
+                            id="btn-plus" onclick="togglePackage('plus')">Paket Plus (+ Layar)</button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary flex-shrink-0">
+                                <span class="material-symbols-outlined">memory</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm sm:text-base">Seeed XIAO ESP32C3</p>
+                                <p class="text-xs text-on-surface-variant">Otak perangkat (Microcontroller)</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary flex-shrink-0">
+                                <span class="material-symbols-outlined">thermostat</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm sm:text-base">Sensor BME680</p>
+                                <p class="text-xs text-on-surface-variant">Suhu, Gas, Kelembapan</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary flex-shrink-0">
+                                <span class="material-symbols-outlined">usb</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm sm:text-base">Kabel USB-C</p>
+                                <p class="text-xs text-on-surface-variant">Untuk transfer kode & daya</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4 opacity-40 grayscale"
+                            id="plus-item">
+                            <div
+                                class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center text-secondary flex-shrink-0">
+                                <span class="material-symbols-outlined">screenshot_monitor</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm sm:text-base">OLED Display 0.96"</p>
+                                <p class="text-xs text-on-surface-variant">Hanya untuk Paket Plus</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-content hidden" id="step-2">
+                    <h2 class="font-headline-md text-on-surface mb-4">Persiapan Software</h2>
+                    <p class="mb-6 text-on-surface-variant text-sm sm:text-base">Kita akan menggunakan Arduino IDE untuk
+                        memasukkan "jiwa" ke dalam sensor kita.</p>
+                    <div class="space-y-4">
+                        <div class="bg-surface-bright p-4 rounded-xl border-l-4 border-primary shadow-sm">
+                            <h4 class="font-bold text-primary mb-1 text-sm sm:text-base">1. Download Arduino IDE</h4>
+                            <p class="text-xs sm:text-sm mb-3">Pilihan versi terbaru sesuai sistem operasi komputer
+                                Anda.</p>
+                            <div
+                                class="flex items-center gap-2 bg-surface-container p-2 rounded-lg border border-outline-variant">
+                                <code
+                                    class="text-xs flex-grow overflow-x-auto whitespace-nowrap custom-scrollbar">https://www.arduino.cc/en/software</code>
+                                <button class="text-primary hover:bg-primary-container/20 p-2 rounded-md flex-shrink-0"
+                                    onclick="copyText('https://www.arduino.cc/en/software', this)">
+                                    <span class="material-symbols-outlined text-sm">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+             <!-- Video Tutorial: Basic -->
+                <div id="video-basic" class="bg-surface-bright p-4 rounded-xl border-l-4 border-secondary shadow-sm">
+                    <h4 class="font-bold text-secondary mb-1 text-sm sm:text-base">2. Video Tutorial Instalasi</h4>
+                    <p class="text-xs text-on-surface-variant mb-2">Untuk Paket Basic</p>
+                    <div class="aspect-video bg-surface-dim rounded-lg overflow-hidden">
+                        <video class="w-full h-full" controls playsinline preload="metadata">
+                            <source src="../img/vidio/testing.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Video Tutorial: Plus -->
+                <div id="video-plus" class="hidden bg-surface-bright p-4 rounded-xl border-l-4 border-secondary shadow-sm">
+                    <h4 class="font-bold text-secondary mb-1 text-sm sm:text-base">2. Video Tutorial Instalasi</h4>
+                    <p class="text-xs text-on-surface-variant mb-2">Untuk Paket Plus</p>
+                    <div class="aspect-video bg-surface-dim rounded-lg overflow-hidden">
+                        <video class="w-full h-full" controls playsinline preload="metadata">
+                            <source src="../img/vidio/testing.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                    </div>
+                </div>
+
+                <div class="step-content hidden" id="step-3">
+                    <h2 class="font-headline-md text-on-surface mb-6">Pemasangan Kabel (Wiring)</h2>
+                    <div class="bg-error-container text-on-error-container p-4 rounded-xl mb-8 flex gap-3 items-center">
+                        <span class="material-symbols-outlined text-error flex-shrink-0">warning</span>
+                        <p class="text-xs sm:text-sm font-medium">Jangan hubungkan USB ke komputer saat memasang kabel
+                            untuk menghindari korsleting!</p>
+                    </div>
+                    <div class="overflow-x-auto border border-outline-variant rounded-xl mb-8 custom-scrollbar">
+                        <table class="w-full text-xs sm:text-sm min-w-[400px]">
+                            <thead class="bg-surface-container-highest">
+                                <tr>
+                                    <th class="px-4 py-3 text-left">Sensor BME680</th>
+                                    <th class="px-4 py-3 text-left">XIAO ESP32C3</th>
+                                    <th class="px-4 py-3 text-left">Fungsi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-outline-variant">
+                                <tr>
+                                    <td class="px-4 py-3 font-bold text-primary">VIN</td>
+                                    <td class="px-4 py-3">3V3</td>
+                                    <td class="px-4 py-3 text-on-surface-variant">Daya (Listrik)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-bold text-primary">GND</td>
+                                    <td class="px-4 py-3">GND</td>
+                                    <td class="px-4 py-3 text-on-surface-variant">Massa/Arus Negatif</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-bold text-primary">SCL</td>
+                                    <td class="px-4 py-3">D5 / SCL</td>
+                                    <td class="px-4 py-3 text-on-surface-variant">Komunikasi Data</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-bold text-primary">SDA</td>
+                                    <td class="px-4 py-3">D4 / SDA</td>
+                                    <td class="px-4 py-3 text-on-surface-variant">Aliran Data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                        <div id="diagram-basic"
+                        class="block aspect-video bg-surface-container-highest rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-outline-variant p-4">
+                        <img src="../img/foto/wiring_paket_basic.png" alt="Wiring Paket Basic"
+                            class="max-h-[70%] w-auto object-contain mb-4 rounded-xl shadow-sm">
+
+                        <span class="material-symbols-outlined text-3xl sm:text-4xl text-outline mb-2">schema</span>
+                        <p class="text-on-surface-variant text-center text-xs sm:text-sm font-medium">Diagram Pemasangan
+                            Jalur I2C: XIAO ESP32S3 ⇄ BME680 (Paket Basic)</p>
+                    </div>
+                      <div id="diagram-plus"
+                        class="hidden aspect-video bg-surface-container-highest rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-secondary/40 p-4">
+                        <img src="../img/foto/wiring_paket_plus.png" alt="Wiring Paket Plus"
+                            class="max-h-[70%] w-auto object-contain mb-4 rounded-xl shadow-sm">
+
+                        <span
+                            class="material-symbols-outlined text-3xl sm:text-4xl text-secondary mb-2">account_tree</span>
+                        <p class="text-on-surface-variant text-center text-xs sm:text-sm font-medium">Diagram Pemasangan
+                            Paralel: BME680 ⇄ XIAO ESP32S3 ⇄ Sensor HM3301 (Paket Plus)</p>
+                    </div>
+                
+                </div>
+
+                <div class="step-content hidden" id="step-4">
+                    <h2 class="font-headline-md text-on-surface mb-4">Uji Coba Perangkat</h2>
+                    <p class="mb-6 text-on-surface-variant text-sm sm:text-base">Gunakan kode tes ini untuk memastikan
+                        kabel terpasang dengan benar.</p>
+                    <div class="relative group">
+                        <div class="absolute top-2 right-2 sm:top-4 sm:right-4 z-10">
+                            <button
+                                class="bg-primary text-on-primary px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1.5 text-xs hover:shadow-md transition-all"
+                                onclick="copyCode('test-code-block', this)">
+                                <span class="material-symbols-outlined text-xs sm:text-sm">content_copy</span> <span
+                                    class="hidden sm:inline">Salin Kode</span>
+                            </button>
+                        </div>
+                        <pre class="bg-on-surface text-surface-container-lowest p-4 sm:p-6 rounded-2xl overflow-x-auto text-xs font-mono leading-relaxed custom-scrollbar max-h-[300px]"
+                            id="test-code-block">#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include "Adafruit_BME680.h"
+
+Adafruit_BME680 bme;
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Mulai Tes Sensor...");
+  if (!bme.begin()) {
+    Serial.println("Sensor Tidak Terdeteksi! Periksa Kabel.");
+    while (1);
+  }
+}
+
+void loop() {
+  if (! bme.performReading()) return;
+  Serial.print("Suhu: "); Serial.println(bme.temperature);
+  delay(2000);
+}</pre>
+                    </div>
+                    <div
+                        class="mt-6 flex items-start sm:items-center gap-4 bg-surface p-4 rounded-xl border border-outline-variant">
+                        <span class="material-symbols-outlined text-primary flex-shrink-0">tips_and_updates</span>
+                        <p class="text-xs sm:text-sm">Buka <b>Serial Monitor</b> di Arduino IDE (Kecepatan 115200 baud)
+                            untuk melihat hasilnya!</p>
+                    </div>
+                </div>
+
+                <div class="step-content hidden" id="step-5">
+                <h2 class="font-headline-md text-on-surface mb-6">Pendaftaran Akun SmartCitizen</h2>
+                <div class="space-y-6">
+
+                    <!-- Langkah 1 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                            1</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold mb-1 text-sm sm:text-base">Kunjungi Portal Registrasi</h4>
+                            <p class="text-on-surface-variant text-xs sm:text-sm mb-2">Buka situs
+                                sensor.smartcitizen.id/register</p>
+                            <button onclick="toggleSteps('sub1', this)"
+                                class="text-xs text-primary flex items-center gap-1 mb-2">
+                                <span id="icon-sub1">▶</span> Lihat langkah detail
+                            </button>
+                            <div id="sub1" class="hidden pl-3 border-l-2 border-primary/30 space-y-3 mt-1">
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">1</span>
+                                    <p>Klik <strong>Platform</strong> kemudian klik <strong>Log In</strong>. Jika belum punya akun, klik <strong>Sign Up</strong> terlebih dahulu lalu log in.</p>
+                                </div>
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">2</span>
+                                    <p>Klik foto profil di pojok kanan atas, lalu pilih <strong>My Profile</strong>.</p>
+                                </div>
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">3</span>
+                                    <p>Klik <strong>REGISTER A NEW KIT</strong>, lalu pada SCK Version 2.x pilih <strong>Smart Citizen Kit version 2.0 to 2.3 (from 2017 onwards)</strong>. Klik <strong>Let's Go</strong> dan ikuti tutorial.</p>
+                                </div>
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">4</span>
+                                    <p>Pada <strong>"How do you want to use your kit?"</strong> pilih sesuai kebutuhan. Contoh: pilih <strong>OFFLINE (SD CARD)</strong>, klik <strong>Continue</strong> dan ikuti langkahnya.</p>
+                                </div>
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">5</span>
+                                    <p>Berikan nama pada sensor <strong>tanpa spasi</strong>, lalu klik <strong>Done</strong>.</p>
+                                </div>
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">6</span>
+                                    <p>Masukkan lokasi kit, klik <strong>All Set</strong>, pilih tag yang sesuai, lalu klik <strong>All Set</strong> kembali.</p>
+                                </div>
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">7</span>
+                                    <p>Masukkan <strong>email</strong> dan <strong>password</strong>, lalu klik <strong>Next</strong>.</p>
+                                </div>
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">8</span>
+                                    <p>Setelah selesai, klik <strong>My Profile</strong> lagi lalu klik nama kit kamu (contoh: <strong>Sentiong_Tangerang</strong>).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Langkah 2 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                            2</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold mb-1 text-sm sm:text-base">Dapatkan Token Rahasia</h4>
+                            <p class="text-on-surface-variant text-xs sm:text-sm mb-2">Setelah daftar, kamu akan
+                                mendapatkan <b>Device Token</b>.</p>
+                            <button onclick="toggleSteps('sub2', this)"
+                                class="text-xs text-primary flex items-center gap-1 mb-2">
+                                <span id="icon-sub2">▶</span> Lihat langkah detail
+                            </button>
+                            <div id="sub2" class="hidden pl-3 border-l-2 border-primary/30 space-y-3 mt-1">
+                                <div class="flex gap-2 text-xs sm:text-sm text-on-surface-variant">
+                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold">1</span>
+                                    <p>Klik <strong>Reveal Device Token</strong> dan salin kode tersebut untuk dimasukkan ke dalam kodingan. Setelah itu verifikasi dan upload kodingan pada kit hingga status <strong>Connected</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kotak Keamanan Token (tetap sama) -->
+                    <div class="bg-secondary-fixed p-4 sm:p-6 rounded-2xl border-2 border-secondary-fixed-variant border-dashed">
+                        <div class="flex items-center gap-3 mb-2 text-on-secondary-fixed">
+                            <span class="material-symbols-outlined flex-shrink-0">security</span>
+                            <h4 class="font-bold text-sm sm:text-base">Keamanan Token</h4>
+                        </div>
+                        <p class="text-xs sm:text-sm text-on-secondary-fixed-variant leading-relaxed">
+                            PENTING: Jangan berikan token ini kepada siapapun! Token ini adalah kunci agar datamu
+                            terkirim dengan benar ke peta Tangerang.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+                <div class="step-content hidden" id="step-6">
+                    <div class="text-center mb-8" id="celebration-header">
+                        <div class="inline-block p-4 bg-primary-fixed rounded-full mb-4">
+                            <span class="material-symbols-outlined text-primary text-3xl sm:text-4xl">celebration</span>
+                        </div>
+                        <h2 class="font-headline-md text-on-surface text-lg sm:text-xl">Tahap Akhir: Deploy Sensor!</h2>
+                        <p class="text-on-surface-variant text-xs sm:text-sm">Masukkan token Anda dan kirim data
+                            kualitas udara pertama Anda.</p>
+                    </div>
+                    <div class="bg-surface-container p-4 sm:p-6 rounded-2xl mb-8">
+                        <label class="block text-xs font-label-caps text-secondary mb-2">Tempel Token Anda di
+                            Sini:</label>
+                        <input
+                            class="w-full bg-surface border-outline-variant rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                            placeholder="Ganti tulisan TOKEN_ANDA di kode bawah..." type="text" />
+                    </div>
+                    <div class="relative">
+                        <div class="absolute top-2 right-2 sm:top-4 sm:right-4 z-10">
+                            <button
+                                class="bg-secondary text-on-secondary px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1.5 text-xs hover:opacity-90 shadow-sm"
+                                onclick="copyCode('main-code-block', this)">
+                                <span class="material-symbols-outlined text-xs sm:text-sm">content_copy</span> <span
+                                    class="hidden sm:inline">Salin Kode Final</span>
+                            </button>
+                        </div>
+                        <pre class="bg-on-surface text-surface-container-lowest p-4 sm:p-6 rounded-2xl overflow-x-auto text-xs font-mono chimneys-scrollbar leading-relaxed max-h-[400px] custom-scrollbar"
+                            id="main-code-block">/*
+ * PROYEK SENSORKITA TANGERANG
+ * Kode Utama Pengiriman Data Udara
+ */
+
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+const char* ssid = "NAMA_WIFI_RUMAH";
+const char* pass = "PASSWORD_WIFI";
+const char* token = "TOKEN_ANDA_DARI_STEP_5";
+
+void setup() {
+  // Masukkan pengaturan sensor dari Step 4 di sini
+  Serial.begin(115200);
+  Serial.println("Alat Siap Mengudara!");
+}
+
+void loop() {
+  // Logika pengiriman data setiap 10 menit
+  Serial.println("Mengirim data ke SmartCitizen Tangerang...");
+  delay(600000); 
+}</pre>
+                    </div>
+                    <div class="hidden mt-10 p-6 sm:p-8 bg-primary-container text-on-primary-container rounded-3xl text-center"
+                        id="success-message">
+                        <h3 class="font-headline-md mb-2 text-base sm:text-lg">Selamat! Anda Pahlawan Udara!</h3>
+                        <p class="text-xs sm:text-sm">Sensor Anda sekarang aktif memantau langit Tangerang.</p>
+                    </div>
+                </div>
+                
+
+                <div class="mt-12 flex justify-between items-center border-t border-outline-variant pt-8">
+                    <button
+                        class="flex items-center gap-1 text-on-surface-variant font-label-caps text-xs sm:text-sm hover:text-primary opacity-50 cursor-not-allowed disabled:opacity-30"
+                        disabled id="prev-btn" onclick="changeStep(-1)">
+                        <span class="material-symbols-outlined text-sm sm:text-base">chevron_left</span> Kembali
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button
+                            class="bg-primary text-on-primary font-label-caps text-xs sm:text-sm px-5 py-2.5 sm:px-8 sm:py-3 rounded-full flex items-center gap-1 hover:shadow-lg transition-all active:scale-95"
+                            id="next-btn" onclick="changeStep(1)">
+                            Selanjutnya <span
+                                class="material-symbols-outlined text-sm sm:text-base">chevron_right</span>
+                        </button>
+                        <button
+                            class="hidden bg-secondary text-on-secondary font-label-caps text-xs sm:text-sm px-6 py-2.5 sm:px-10 sm:py-3 rounded-full hover:shadow-lg transition-all active:scale-95"
+                            id="finish-btn" onclick="finishWizard()">
+                            Selesai & Rayakan!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="mt-12 bg-surface-container p-4 sm:p-6 rounded-2xl flex items-start gap-4">
+                <img alt="Coding Cat Tips" class="w-12 h-12 rounded-full flex-shrink-0"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvp-CyD3nb4-rWzdtosJpRjOcfFIEWYdpFKbz-tcOFegoB5-qNbiQl9ycoJ4Ml1wYcgePPB5MDSD1NvXqNDgbTCZe-gaZGmcQolLRrXMY98bO7wGngfNLCSyNULe52LSADexPOX3TxtqGrRtQRv_7irHzmCG7WpOYIJH097gQqDeH1-Vz1Q6qpB0FIERoKgVb_vGAQ2O0y9YcVGkQXJvqeCydtQA2BBFkJIqUHvbtEehTpnzsXdoTO5rT6gA8r6z6aiVEhG4eNnA" />
+                <div>
+                    <h5 class="font-bold text-primary mb-1 text-sm sm:text-base">Tips dari Oyen:</h5>
+                    <p class="text-xs sm:text-sm text-on-surface-variant" id="dynamic-tip">Selalu simpan kabel cadangan
+                        di dekatmu, siapa tahu yang satu macet!</p>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+<!-- ===================== FAQ SECTION ===================== -->
+<!-- Taruh di bagian paling bawah panduan.html, sebelum footer -->
+
+<section id="faq" class="max-w-container-max-width mx-auto px-4 md:px-card-padding py-16">
+    <div class="mb-10">
+        <p class="font-label-caps text-xs text-primary tracking-widest mb-2">FAQ</p>
+        <h2 class="font-display-lg text-headline-lg text-on-surface mb-2">Pertanyaan yang Sering Diajukan</h2>
+        <p class="text-on-surface-variant text-sm max-w-xl">Seputar sensor BME680, data kualitas udara, dan cara menggunakan perangkat Bayu Indoor.</p>
+    </div>
+
+    <div class="flex flex-col gap-3" id="faq-list">
+
+        <!-- FAQ Item template: tambah atau kurangi sesuai kebutuhan -->
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Apa itu sensor BME680?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed">BME680 adalah sensor lingkungan dari Bosch yang mengukur empat parameter sekaligus: <strong class="text-on-surface">suhu, kelembaban relatif, tekanan barometrik, dan resistansi gas</strong> (yang diolah menjadi indeks VOC/kesegaran udara). Satu chip kecil ini memberi gambaran komprehensif kondisi udara dalam ruangan.</p>
+            </div>
+        </div>
+
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Apakah BME680 bisa mengukur CO₂ atau PM2.5?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed"><strong class="text-on-surface">Tidak.</strong> BME680 hanya menghasilkan indeks VOC (kesegaran udara relatif), bukan kadar CO₂ sebenarnya dan bukan partikel debu/PM2.5. Untuk CO₂ nyata, tambahkan modul <strong class="text-on-surface">+CO₂ (Sensirion SCD41)</strong>. Untuk debu/asap, tambahkan modul <strong class="text-on-surface">+PM (Plantower PMS7003T)</strong>.</p>
+            </div>
+        </div>
+
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Mengapa pembacaan VOC saya tidak akurat di awal?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed">Sensor gas BME680 membutuhkan waktu <strong class="text-on-surface">burn-in 24–48 jam</strong> saat pertama kali dinyalakan. Selama periode ini, sensor membangun data dasar (baseline) sehingga pembacaan VOC awal tidak memiliki makna. Biarkan perangkat menyala terus menerus selama minimal sehari sebelum mempercayai angka VOC/IAQ-nya.</p>
+            </div>
+        </div>
+
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Berapa kelembaban ideal untuk rumah di Indonesia?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed">Zona nyaman adalah <strong class="text-on-surface">40–60% RH</strong>. Di atas 60% mulai perlu diwaspadai (tungau debu, alergen), dan di atas 70% risiko jamur meningkat signifikan. Kebanyakan rumah di Bali/Indonesia berada di zona risiko jamur hampir sepanjang waktu, terutama malam hari dan setelah hujan.</p>
+            </div>
+        </div>
+
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Mengapa suhu yang terbaca lebih tinggi dari suhu ruangan sebenarnya?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed">BME680 diletakkan dekat ESP32 dan regulatornya yang menghasilkan panas. Ini menyebabkan pembacaan suhu <strong class="text-on-surface">sekitar 1–2°C lebih tinggi</strong> dari kondisi nyata. Solusinya: pasang sensor di tempat dengan aliran udara bebas, jauh dari titik panas PCB, dan terapkan offset suhu di firmware. Ingat, offset suhu yang salah juga akan memengaruhi akurasi pembacaan kelembaban.</p>
+            </div>
+        </div>
+
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Apa itu IAQ (saluran 241) di platform Smart Citizen?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed">IAQ (Indoor Air Quality) adalah indeks kesegaran udara dalam ruangan berskala <strong class="text-on-surface">0–500</strong>, di mana nilai lebih rendah berarti udara lebih bersih. Ini dihitung dari resistansi gas BME680 yang disesuaikan dengan kelembaban. <strong class="text-on-surface">Penting:</strong> ini bukan AQI resmi berbasis PM2.5/ozon, dan bukan BSEC berlisensi Bosch — melainkan indikator VOC/kesegaran udara yang merespons aktivitas memasak, dupa, pelepasan gas, dan ventilasi.</p>
+            </div>
+        </div>
+
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Bisakah sensor ini mendeteksi risiko demam berdarah (DBD)?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed"><strong class="text-on-surface">Tidak secara langsung.</strong> Sensor tidak mendeteksi nyamuk atau larva. Yang bisa dilakukan adalah memantau kondisi lingkungan yang mendukung perkembangan nyamuk Aedes: suhu 25–30°C dan RH di atas 60–70%. Ketika sensor mendeteksi lonjakan kelembaban setelah hujan, gunakan itu sebagai <strong class="text-on-surface">pengingat untuk melakukan PSN/3M Plus</strong> — periksa dan bersihkan genangan air dalam 1–2 minggu ke depan.</p>
+            </div>
+        </div>
+
+        <div class="faq-item border border-outline-variant rounded-2xl overflow-hidden">
+            <button onclick="toggleFaq(this)"
+                class="w-full flex justify-between items-center px-5 py-4 text-left hover:bg-surface-container transition-colors gap-4">
+                <span class="font-label-caps text-on-surface text-sm">Bagaimana cara membaca lonjakan VOC secara benar?</span>
+                <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 transition-transform duration-200">expand_more</span>
+            </button>
+            <div class="faq-body hidden px-5 pb-5">
+                <p class="text-sm text-on-surface-variant leading-relaxed">VOC paling berguna dibaca sebagai <strong class="text-on-surface">perubahan terhadap garis dasar</strong>, bukan angka absolut. Lonjakan tajam tiba-tiba bisa berarti aktivitas memasak, membakar dupa/obat nyamuk, atau penggunaan produk pembersih. Peningkatan berkelanjutan selama beberapa hari setelah renovasi menandakan pelepasan gas dari cat atau furnitur baru. Selalu ventilasi ruangan jika VOC meningkat signifikan.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+    <!-- Settings Panel -->
+<div id="settings-overlay" class="fixed inset-0 bg-black/40 z-[90] hidden" onclick="closeSettings()"></div>
+
+<div id="settings-panel"
+    class="fixed top-0 right-0 h-full w-80 max-w-full bg-surface shadow-2xl z-[100] translate-x-full transition-transform duration-300 flex flex-col">
+    
+    <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant">
+        <span class="font-label-caps text-on-surface text-base">Pengaturan</span>
+        <button onclick="closeSettings()" class="p-1 rounded-full hover:bg-surface-container transition-colors">
+            <span class="material-symbols-outlined text-on-surface-variant">close</span>
+        </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+
+        <!-- Tema -->
+        <div>
+            <p class="font-label-caps text-xs text-on-surface-variant mb-3 tracking-widest uppercase">Tema</p>
+            <div class="flex gap-3">
+                <button id="theme-light-btn" onclick="setTheme('light')"
+                    class="flex-1 flex flex-col items-center gap-2 p-3 rounded-xl border-2 border-primary bg-primary-container/20 transition-all">
+                    <span class="material-symbols-outlined text-primary">light_mode</span>
+                    <span class="font-label-caps text-xs text-primary">Terang</span>
+                </button>
+                <button id="theme-dark-btn" onclick="setTheme('dark')"
+                    class="flex-1 flex flex-col items-center gap-2 p-3 rounded-xl border-2 border-outline-variant hover:border-primary transition-all">
+                    <span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
+                    <span class="font-label-caps text-xs text-on-surface-variant">Gelap</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="border-t border-outline-variant"></div>
+
+        <!-- Bantuan -->
+        <div>
+            <p class="font-label-caps text-xs text-on-surface-variant mb-3 tracking-widest uppercase">Bantuan</p>
+            <p class="text-sm text-on-surface-variant mb-4 leading-relaxed">Punya pertanyaan untuk developer?</p>
+            <button onclick="openHelpModal()"
+                class="w-full bg-primary text-on-primary font-label-caps py-3 rounded-full hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-base">chat</span>
+                Bantuan
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Bantuan -->
+<div id="help-modal-overlay"
+    class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4"
+    onclick="closeHelpModal(event)">
+    <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-4" onclick="event.stopPropagation()">
+        
+        <div class="flex items-center justify-between">
+            <span class="font-label-caps text-on-surface">Kirim Pertanyaan</span>
+            <button onclick="closeHelpModal()" class="p-1 rounded-full hover:bg-surface-container transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant">close</span>
+            </button>
+        </div>
+
+        <!-- Form state -->
+        <div id="help-form-state" class="flex flex-col gap-3">
+            <div>
+                <label class="font-label-caps text-xs text-on-surface-variant mb-1 block">Nama</label>
+                <input id="help-name" type="text" placeholder="Nama kamu"
+                    class="w-full px-3 py-2 rounded-lg border border-outline-variant bg-surface-container text-on-surface text-sm focus:outline-none focus:border-primary transition-colors" />
+            </div>
+            <div>
+                <label class="font-label-caps text-xs text-on-surface-variant mb-1 block">Email</label>
+                <input id="help-email" type="email" placeholder="email@kamu.com"
+                    class="w-full px-3 py-2 rounded-lg border border-outline-variant bg-surface-container text-on-surface text-sm focus:outline-none focus:border-primary transition-colors" />
+            </div>
+            <div>
+                <label class="font-label-caps text-xs text-on-surface-variant mb-1 block">Pertanyaan</label>
+                <textarea id="help-message" rows="4" placeholder="Tulis pertanyaanmu di sini..."
+                    class="w-full px-3 py-2 rounded-lg border border-outline-variant bg-surface-container text-on-surface text-sm focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
+            </div>
+            <button onclick="submitHelpForm()"
+                class="w-full bg-primary text-on-primary font-label-caps py-3 rounded-full hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-base">send</span>
+                Kirim Email
+            </button>
+        </div>
+
+        <!-- Sukses state -->
+        <div id="help-success-state" class="hidden flex flex-col items-center text-center gap-4 py-4">
+            <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-3xl text-primary">check_circle</span>
+            </div>
+            <div>
+                <p class="font-label-caps text-on-surface mb-1">Pesan Terkirim!</p>
+                <p class="text-sm text-on-surface-variant">Developer akan merespons ke email kamu segera.</p>
+            </div>
+            <button onclick="resetHelpForm()"
+                class="border border-outline-variant text-on-surface-variant font-label-caps text-sm px-6 py-2 rounded-full hover:bg-surface-container transition-colors">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    <footer class="bg-surface-container-highest border-t border-outline-variant mt-section-gap-desktop">
+        <div
+            class="max-w-container-max-width mx-auto py-8 px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <span class="font-headline-md text-secondary">SensorKita</span>
+                <p class="font-label-caps text-xs text-on-surface-variant mt-1">© 2024 Bengkel Udara Community</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+                <a class="font-label-caps text-xs sm:text-sm text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">Kebijakan Privasi</a>
+                <a class="font-label-caps text-xs sm:text-sm text-on-surface-variant hover:text-primary transition-colors"
+                    href="#">Kontak Kami</a>
+            </div>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+<script>
+function toggleSteps(id, btn) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById('icon-' + id);
+    const isOpen = !el.classList.contains('hidden');
+    el.classList.toggle('hidden', isOpen);
+    icon.textContent = isOpen ? '▶' : '▼';
+}
+</script>
+
+</html>

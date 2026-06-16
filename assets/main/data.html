@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dashboard Data | SensorKita Tangerang</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#695d46", "surface-dim": "#dcd9d9", "on-primary-fixed": "#002108", "on-secondary-fixed": "#231a08", "surface-container": "#f0eded", "on-error-container": "#93000a", "primary": "#416744", "outline": "#727970", "tertiary-fixed-dim": "#9ecfd1", "on-secondary-container": "#6d614a", "on-tertiary-container": "#003a3c", "primary-fixed-dim": "#a7d1a6", "inverse-primary": "#a7d1a6", "tertiary-container": "#73a4a6", "inverse-on-surface": "#f3f0f0", "on-secondary-fixed-variant": "#504530", "tertiary-fixed": "#b9ecee", "on-surface-variant": "#424941", "surface-container-lowest": "#ffffff", "secondary-fixed": "#f2e0c3", "on-primary-fixed-variant": "#294f2e", "primary-container": "#7da67e", "outline-variant": "#c2c8be", "on-secondary": "#ffffff", "surface-container-low": "#f6f3f2", "surface-bright": "#fbf9f8", "on-surface": "#1b1c1c", "surface-variant": "#e4e2e1", "on-error": "#ffffff", "on-tertiary-fixed": "#002021", "background": "#fbf9f8", "surface-container-high": "#eae8e7", "on-tertiary": "#ffffff", "on-tertiary-fixed-variant": "#1a4e50", "surface": "#fbf9f8", "on-primary": "#ffffff", "on-primary-container": "#153b1c", "primary-fixed": "#c2eec1", "inverse-surface": "#303030", "secondary-container": "#efdec0", "on-background": "#1b1c1c", "surface-container-highest": "#e4e2e1", "error": "#ba1a1a", "tertiary": "#356668", "surface-tint": "#416744", "error-container": "#ffdad6", "secondary-fixed-dim": "#d5c5a8"
+                    },
+                    "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    "spacing": { "base": "8px", "container-max-width": "1140px", "card-padding": "24px", "section-gap-mobile": "40px", "section-gap-desktop": "80px" },
+                    "fontFamily": { "display-lg-mobile": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-md": ["Plus Jakarta Sans"], "body-md": ["Inter"], "label-caps": ["Inter"] },
+                    "fontSize": { "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }], "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-lg": ["18px", { "lineHeight": "1.7", "fontWeight": "400" }], "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }], "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }], "label-caps": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }] }
+                }
+            }
+        }
+    </script>
+    <link href="../css/style.css" rel="stylesheet" />
+    <style>
+        /* Penyelarasan integrasi leaflet & custom scrollbar utilitas */
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f0eded; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c2c8be; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #727970; }
+        #map { z-index: 1 !important; }
+        
+        /* Sinkronisasi class dinamis mesin risiko */
+        .risk.low { background-color: #ecfdf5; color: #047857; border: 1px solid #c6f6d5; }
+        .risk.low .level { background-color: #d1fae5; color: #065f46; }
+        .risk.medium { background-color: #fff7ed; color: #b45309; border: 1px solid #fed7aa; }
+        .risk.medium .level { background-color: #ffedd5; color: #9a3412; }
+        .risk.high { background-color: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+        .risk.high .level { background-color: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+
+    <header class="bg-surface sticky top-0 z-50 shadow-sm w-full h-16 flex items-center">
+        <div
+            class="w-full max-w-container-max-width mx-auto px-4 md:px-card-padding flex justify-between items-center relative">
+
+            <div class="flex items-center gap-2">
+                <span class="font-display-lg text-headline-md text-primary tracking-tight cursor-pointer"
+                       onclick="window.location.href='../../index.html'">SensorKita</span>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-6">
+                <div class="relative group">
+                    <button id="desktop-data-btn"
+                        class="font-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 py-2">
+                        Data <span class="material-symbols-outlined text-sm transition-transform duration-200"
+                            id="data-arrow">keyboard_arrow_down</span>
+                    </button>
+                    <div id="desktop-dropdown"
+                        class="absolute left-0 mt-1 w-48 bg-surface rounded-xl shadow-lg border border-outline-variant py-2 hidden z-50">
+                        <button onclick="window.location.href='data.html'"
+                            class="w-full text-left px-4 py-2 text-sm font-label-caps text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all">
+                            Dashboard
+                        </button>
+                        <button onclick="switchSubTab('info')"
+                            class="w-full text-left px-4 py-2 text-sm font-label-caps text-primary hover:bg-surface-container transition-all">
+                            Info
+                        </button>
+
+                    </div>
+                </div>
+                <a class="font-label-caps text-primary border-b-2 border-primary py-1 nav-link active-page"
+                    href="panduan.html" data-page="panduan">Panduan</a>
+                <a class="font-label-caps text-on-surface-variant hover:text-primary transition-colors py-1 nav-link"
+                    href="komunitas.html" data-page="komunitas">Komunitas</a>
+            </nav>
+
+            <div class="flex items-center gap-2 md:gap-4">
+                <!-- FAQ icon — scroll ke bagian FAQ di panduan.html -->
+                <a href="panduan.html#faq"
+                    class="material-symbols-outlined text-on-surface-variant cursor-pointer p-1 rounded-full hover:bg-surface-container transition-colors"
+                    title="FAQ">help</a>
+                <span onclick="openSettings()"
+                    class="material-symbols-outlined text-on-surface-variant cursor-pointer p-1 rounded-full hover:bg-surface-container transition-colors">settings</span>
+                <!-- Hubungi Kami — WhatsApp -->
+                <a href="https://wa.me/6287775881409" target="_blank" rel="noopener noreferrer"
+                    class="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity text-sm font-label-caps">
+                    <span class="material-symbols-outlined text-base">chat</span>
+                    <span>Hubungi Kami</span>
+                </a>
+            </div>
+
+        
+<div id="mobile-menu"
+    class="absolute top-16 left-0 right-0 bg-surface border-b border-outline-variant shadow-md p-4 hidden flex-col gap-4 md:hidden z-50">
+                <div>
+                    <button id="mobile-data-btn"
+                        class="w-full flex justify-between items-center font-label-caps text-on-surface-variant py-2">
+                        <span href="assets/main/data.html">Data</span>
+                        <span class="material-symbols-outlined transition-transform"
+                            id="mobile-data-arrow">keyboard_arrow_down</span>
+                    </button>
+                    <div id="mobile-data-sub"
+                        class="hidden pl-4 flex flex-col gap-2 mt-1 border-l-2 border-outline-variant">
+                        <button onclick="window.location.href='data.html'"
+                            class="text-left font-label-caps text-sm text-on-surface-variant hover:text-primary py-2">
+                            Dashboard
+                        </button>
+                        <button onclick="switchSubTab('info')"
+                            class="w-full text-left px-4 py-2 text-sm font-label-caps text-primary hover:bg-surface-container transition-all">
+                            Info
+                        </button>
+                    </div>
+                </div>
+                <div>
+                <a class="font-label-caps text-primary py-2 border-b border-outline-variant nav-link active-page"
+                    href="panduan.html" data-page="panduan">Panduan</a>
+                <a class="font-label-caps text-on-surface-variant hover:text-primary py-2 nav-link"
+                    href="komunitas.html" data-page="komunitas">Komunitas</a>
+                </div>
+        </div>
+    </header>
+
+    <div id="tab-dashboard" class="block">
+        <main class="w-full max-w-container-max-width mx-auto px-4 md:px-card-padding py-6 md:py-10">
+            
+            <section class="bg-surface-container-low border border-outline-variant rounded-3xl p-6 md:p-8 mb-6 relative overflow-hidden shadow-sm">
+                <div class="relative z-10">
+                    <div class="text-primary text-xs font-bold tracking-widest uppercase mb-2">Kabupaten Tangerang · Environmental Health & Urban Resilience</div>
+                    <h1 class="font-display-lg text-2xl md:text-4xl text-on-surface font-extrabold tracking-tight leading-none mb-3">Environmental Health Intelligence Platform</h1>
+                    <p class="text-on-surface-variant text-sm md:text-base max-w-4xl leading-relaxed">
+                        Platform ini mengintegrasikan data sensor IoT Smart Citizen, prakiraan cuaca BMKG, serta rujukan Profil Kesehatan Kabupaten Tangerang untuk mendukung analitik risiko DBD, malaria, mold, kualitas udara dalam ruang, dan ketahanan perkotaan berbasis data.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4 mt-6 items-end">
+                        <div class="flex flex-col gap-1.5">
+                            <label for="deviceMode" class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Mode Sensor</label>
+                            <select id="deviceMode" class="bg-surface border border-outline-variant rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-on-surface outline-none focus:border-primary">
+                                <option value="all" selected>Semua Device</option>
+                                <!-- <option value="19686">Device 19686</option> -->
+                                <option value="19684">Device 19684</option>
+                                <option value="19682">Device 19682</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label for="adm4Input" class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Kode BMKG ADM4</label>
+                            <input id="adm4Input" value="36.03.03.1001" class="bg-surface border border-outline-variant rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold text-on-surface outline-none focus:border-primary" />
+                        </div>
+                        <button id="refreshBtn" type="button" class="bg-primary text-on-primary font-label-caps text-xs px-6 py-3 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-md font-bold">
+                            Refresh Dashboard
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+                <article class="bg-surface-container-low border border-outline-variant rounded-2xl p-5 min-h-[160px] flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl mb-3">🌡️</div>
+                        <div class="text-[11px] font-bold tracking-wider text-on-surface-variant uppercase">Avg Temperature</div>
+                        <div class="text-2xl font-extrabold text-on-surface mt-1"><span id="avgTemp">--</span><span class="text-sm font-medium text-on-surface-variant ml-0.5">°C</span></div>
+                    </div>
+                    <div class="text-[9px] text-outline leading-tight mt-3 font-medium">Sumber: Smart Citizen API · Sensor Device 19682, 19684, 19686</div>
+                </article>
+
+                <article class="bg-surface-container-low border border-outline-variant rounded-2xl p-5 min-h-[160px] flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl mb-3">💧</div>
+                        <div class="text-[11px] font-bold tracking-wider text-on-surface-variant uppercase">Avg Humidity</div>
+                        <div class="text-2xl font-extrabold text-on-surface mt-1"><span id="avgHum">--</span><span class="text-sm font-medium text-on-surface-variant ml-0.5">%</span></div>
+                    </div>
+                    <div class="text-[9px] text-outline leading-tight mt-3 font-medium">Sumber: Smart Citizen API · Sensor Device 19682, 19684, 19686</div>
+                </article>
+
+                <article class="bg-surface-container-low border border-outline-variant rounded-2xl p-5 min-h-[160px] flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center text-xl mb-3">🌦️</div>
+                        <div class="text-[11px] font-bold tracking-wider text-on-surface-variant uppercase">Rain Watch</div>
+                        <div class="text-2xl font-extrabold text-on-surface mt-1"><span id="rainWatch">--</span><span class="text-sm font-medium text-on-surface-variant ml-0.5">slot</span></div>
+                    </div>
+                    <div class="text-[9px] text-outline leading-tight mt-3 font-medium">Sumber: BMKG Prakiraan Cuaca API · Berdasarkan Kode ADM4</div>
+                </article>
+
+                <article class="bg-surface-container-low border border-outline-variant rounded-2xl p-5 min-h-[160px] flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center text-xl mb-3">🦟</div>
+                        <div class="text-[11px] font-bold tracking-wider text-on-surface-variant uppercase">Dengue Risk</div>
+                        <div class="text-2xl font-black text-primary mt-1"><span id="dengueLevel">--</span></div>
+                    </div>
+                    <div class="text-[9px] text-outline leading-tight mt-3 font-medium">Sumber: Smart Citizen + BMKG · Environmental Risk Engine</div>
+                </article>
+
+                <article class="bg-surface-container-low border border-outline-variant rounded-2xl p-5 min-h-[160px] flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-tertiary-container/20 text-tertiary flex items-center justify-center text-xl mb-3">🏙️</div>
+                        <div class="text-[11px] font-bold tracking-wider text-on-surface-variant uppercase">Resilience Score</div>
+                        <div class="text-2xl font-extrabold text-on-surface mt-1"><span id="resilienceScore">--</span><span class="text-sm font-medium text-on-surface-variant ml-0.5">/100</span></div>
+                    </div>
+                    <div class="text-[9px] text-outline leading-tight mt-3 font-medium">Sumber: Environmental Health Index · Turunan DBD, Mold, IAQ</div>
+                </article>
+            </section>
+
+            <section class="bg-surface-container-low border border-outline-variant rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+                <h2 class="text-base sm:text-lg font-bold text-on-surface mb-4 flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">map</span> Sensor Network Map</h2>
+                <div id="map" class="h-[420px] rounded-2xl border border-outline-variant overflow-hidden shadow-inner"></div>
+            </section>
+
+            <section class="bg-surface-container-low border border-outline-variant rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+                <h2 class="text-base sm:text-lg font-bold text-on-surface mb-4 flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">grid_view</span> Risk Matrix</h2>
+                <div id="riskGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 bg-orange-50 text-amber-800 border border-orange-200 font-bold rounded-2xl text-sm">Menghitung risiko...</div>
+                </div>
+            </section>
+
+            <section class="bg-surface-container-low border border-outline-variant rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+                <h2 class="text-base sm:text-lg font-bold text-on-surface mb-3 flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">gavel</span> Policy Recommendation Panel</h2>
+                <div id="recommendationBox" class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl p-5 text-xs sm:text-sm text-on-surface-variant leading-relaxed shadow-sm">
+                    Memuat rekomendasi...
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+                <div class="lg:col-span-7 bg-surface-container-low border border-outline-variant rounded-3xl p-5 md:p-6 shadow-sm">
+                    <h2 class="text-base sm:text-lg font-bold text-on-surface mb-4 flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">bar_chart</span> Sensor Comparison</h2>
+                    <div class="overflow-x-auto w-full custom-scrollbar">
+                        <canvas id="sensorChart" width="1000" height="360" class="bg-white rounded-2xl border border-outline-variant max-w-full block"></canvas>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-surface-container-low border border-outline-variant rounded-3xl p-5 md:p-6 shadow-sm flex flex-col">
+                    <h2 class="text-base sm:text-lg font-bold text-on-surface mb-4 flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">cloudy</span> BMKG Weather Intelligence</h2>
+                    <div id="bmkgBox" class="p-4 bg-surface-container-lowest border border-outline-variant/60 rounded-2xl font-medium text-xs sm:text-sm leading-relaxed text-on-surface-variant overflow-y-auto max-h-[360px] custom-scrollbar flex-1 shadow-sm">
+                        Mengambil prakiraan BMKG...
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-surface-container-low border border-outline-variant rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+                <h2 class="text-base sm:text-lg font-bold text-on-surface mb-4 flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">library_books</span> Health Data Reference</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-5 bg-surface border border-outline-variant/60 rounded-2xl shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-sm sm:text-base text-secondary flex items-center gap-1.5 mb-2">
+                                <span class="material-symbols-outlined">analytics</span> Profil Kesehatan Kabupaten Tangerang
+                            </h3>
+                            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                                Data kesehatan digunakan sebagai baseline epidemiologi, termasuk DBD, malaria, penyakit berbasis lingkungan, fasilitas kesehatan, dan indikator kesehatan daerah.
+                            </p>
+                        </div>
+                        <a href="https://dinkes.tangerangkab.go.id/detail-menu-konten/1530" target="_blank" class="mt-4 inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline">
+                            Buka Sumber Dinkes Kabupaten Tangerang <span class="material-symbols-outlined text-xs">open_in_new</span>
+                        </a>
+                    </div>
+
+                    <div class="p-5 bg-surface border border-outline-variant/60 rounded-2xl shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-sm sm:text-base text-primary flex items-center gap-1.5 mb-2">
+                                <span class="material-symbols-outlined">radar</span> BMKG Prakiraan Cuaca
+                            </h3>
+                            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                                Data BMKG digunakan untuk membaca prakiraan hujan, suhu, dan kelembapan sebagai variabel penguat risiko DBD, malaria, dan mold.
+                            </p>
+                        </div>
+                        <a href="https://data.bmkg.go.id/prakiraan-cuaca/" target="_blank" class="mt-4 inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline">
+                            Buka Dokumentasi BMKG <span class="material-symbols-outlined text-xs">open_in_new</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-surface-container-low border border-outline-variant rounded-3xl p-5 md:p-6 shadow-sm">
+                <h2 class="text-base sm:text-lg font-bold text-on-surface mb-4 flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">view_list</span> Device Data Log</h2>
+                <div class="table-wrap border border-outline-variant rounded-2xl overflow-hidden custom-scrollbar">
+                    <table class="w-full text-xs sm:text-sm border-collapse bg-white text-left min-w-[850px]">
+                        <thead class="bg-surface-container-high text-on-surface font-bold text-xs uppercase tracking-wider">
+                            <tr>
+                                <th class="px-5 py-3.5">Device</th>
+                                <th class="px-5 py-3.5">Status</th>
+                                <th class="px-5 py-3.5">Suhu</th>
+                                <th class="px-5 py-3.5">RH</th>
+                                <th class="px-5 py-3.5">IAQ Proxy</th>
+                                <th class="px-5 py-3.5">Koordinat Spasial</th>
+                                <th class="px-5 py-3.5">Terakhir Update</th>
+                                <th class="px-5 py-3.5">Analisis</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deviceTable" class="divide-y divide-outline-variant/40 text-on-surface-variant">
+                            <tr><td colspan="7" class="p-5"><div class="p-3 bg-orange-50 text-amber-800 rounded-xl font-semibold">Memuat data device...</div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+
+
+            <footer class="mt-8 text-center text-xs text-outline leading-relaxed max-w-4xl mx-auto">
+                Sumber data terintegrasi: Smart Citizen API, BMKG Open Weather Forecast API, dan rujukan profil data spasial kesehatan Kabupaten Tangerang. Dashboard ini bersifat informatif untuk kesiapsiagaan dan bukan merupakan penetapan resmi status KLB atau keputusan diagnosis medis.
+            </footer>
+        </main>
+    </div>
+
+    <div id="tab-info" class="hidden">
+        <section class="w-full max-w-container-max-width mx-auto px-4 md:px-card-padding py-6 md:py-10">
+            <div class="bg-gradient-to-r from-primary-container/20 to-secondary-container/10 rounded-3xl p-6 md:p-8 mb-8 border border-outline-variant/30">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+                            <span class="material-symbols-outlined text-sm">menu_book</span> Panduan Lapangan
+                        </span>
+                        <h2 class="font-display-lg text-2xl md:text-3xl text-on-surface font-extrabold tracking-tight">Interpretasi Sensor BME680</h2>
+                        <p class="text-on-surface-variant text-sm max-w-2xl leading-relaxed">
+                            Panduan praktis untuk memahami dinamika sirkulasi udara, kelembapan tropis, dan indeks kesegaran lingkungan di dalam rumah tangga Indonesia.
+                        </p>
+                    </div>
+                    <div class="hidden lg:block"><span class="material-symbols-outlined text-6xl text-primary/30">analytics</span></div>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <div class="flex items-center gap-2 mb-4"><span class="w-1 h-6 bg-primary rounded-full"></span><h3 class="text-lg font-bold text-on-surface tracking-tight">Karakteristik Sinyal Dasar</h3></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/40 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 rounded-xl bg-tertiary-container/20 text-tertiary"><span class="material-symbols-outlined">swap_driving_apps</span></div>
+                            <div class="space-y-2 flex-1">
+                                <h4 class="font-bold text-sm sm:text-base text-on-surface">Dinamika Kelembapan vs VOC</h4>
+                                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                                    <strong class="text-on-surface">Kelembapan</strong> bersifat mutlak untuk memantau kenyamanan dan jamur. Sementara <strong class="text-on-surface">VOC</strong> merupakan indeks kesegaran udara relatif. Perhatikan lonjakan tajam terhadap garis dasar (<em class="text-primary font-medium">baseline</em>), bukan angka absolutnya, karena ia merespons aktivitas seperti memasak atau sirkulasi udara.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/40 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 rounded-xl bg-error-container/20 text-error"><span class="material-symbols-outlined">warning</span></div>
+                            <div class="space-y-2 flex-1">
+                                <h4 class="font-bold text-sm sm:text-base text-on-surface">Efek Pemanasan Sendiri (Self-Heating)</h4>
+                                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                                    Chip BME680 yang berada dekat dengan modul ESP32 dapat membaca suhu <span class="text-error font-semibold">1–2°C lebih tinggi</span> akibat rambatan panas papan pengontrol. Pastikan penempatan node memiliki aliran udara bebas dan terapkan nilai kompensasi (<em class="text-primary font-medium">offset</em>) pada firmware Anda.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <div class="flex items-center gap-2 mb-2"><span class="w-1 h-6 bg-secondary rounded-full"></span><h3 class="text-lg font-bold text-on-surface tracking-tight">Matriks Kondisi Rumah Tangga Indonesia</h3></div>
+                <p class="text-xs sm:text-sm text-on-surface-variant mb-6">Ambang batas acuan lokal untuk mengidentifikasi anomali pada grafik pemantauan Anda:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:border-error/40 transition-colors">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div class="p-2.5 rounded-xl bg-red-50 text-error"><span class="material-symbols-outlined">coronavirus</span></div>
+                                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-red-50 text-error border border-error/20">&gt; 70% RH</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm sm:text-base text-on-surface mb-1">Risiko Jamur & Dinding Apak</h4>
+                                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Kelembapan relatif tinggi yang menetap dalam waktu lama (biasanya pasca hujan atau malam hari) memicu spora jamur pada dinding rumah.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:border-secondary/40 transition-colors">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div class="p-2.5 rounded-xl bg-orange-50 text-secondary"><span class="material-symbols-outlined">bed</span></div>
+                                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-orange-50 text-secondary border border-secondary/20">&gt; 60% RH</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm sm:text-base text-on-surface mb-1">Alergen & Tungau Debu</h4>
+                                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Kondisi kasur atau ruangan yang konsisten lembap menjadi lingkungan ideal bagi perkembangbiakan tungau pemicu alergi pernapasan.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:border-primary/40 transition-colors">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div class="p-2.5 rounded-xl bg-green-50 text-primary"><span class="material-symbols-outlined">water_drop</span></div>
+                                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-green-50 text-primary border border-primary/20">Info Tekanan</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm sm:text-base text-on-surface mb-1">Siklus Genangan & Nyamuk</h4>
+                                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Kombinasi jatuhnya tekanan udara dan melonjaknya kelembapan mengindikasikan datangnya hujan besar. Alarm dini untuk waspada genangan air.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-surface-container-lowest border border-outline-variant/60 rounded-2xl p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div class="space-y-1">
+                        <h3 class="text-base sm:text-lg font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-secondary">extension</span> Modul Ekstensi Masa Depan</h3>
+                        <p class="text-xs text-on-surface-variant leading-relaxed">Kit dasar mengukur indeks campuran tunggal (VOC relatif). Pasang modul tambahan berikut jika Anda memerlukan metrik spesifik:</p>
+                    </div>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-outline-variant/40">
+                    <table class="w-full text-xs sm:text-sm text-left min-w-[550px]">
+                        <thead class="bg-surface-container text-on-surface font-semibold text-xs border-b border-outline-variant">
+                            <tr><th class="px-5 py-3.5">Target Parameter</th><th class="px-5 py-3.5">Keterbatasan Kit Dasar</th><th class="px-5 py-3.5">Rekomendasi Modul Tambahan</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/30 text-on-surface-variant bg-surface-container-lowest">
+                            <tr class="hover:bg-surface-container-low/50 transition-colors">
+                                <td class="px-5 py-4 font-semibold text-on-surface">Kadar CO₂ Murni / Laju Ventilasi</td>
+                                <td class="px-5 py-4 text-xs">Indeks VOC hanya mendeteksi perubahan bau/gas, bukan volume sirkulasi udara aktual.</td>
+                                <td class="px-5 py-4"><span class="inline-flex font-mono text-[11px] font-bold text-secondary bg-secondary-container/30 px-2 py-1 rounded">Sensirion SCD41 (I2C)</span></td>
+                            </tr>
+                            <tr class="hover:bg-surface-container-low/50 transition-colors">
+                                <td class="px-5 py-4 font-semibold text-on-surface">Partikulat Debu PM2.5 / Polusi Asap</td>
+                                <td class="px-5 py-4 text-xs">Tidak memiliki komponen optik penangkap partikulat mikroskopis di udara.</td>
+                                <td class="px-5 py-4">
+                                    <span class="inline-flex font-mono text-[11px] font-bold text-secondary bg-secondary-container/30 px-2 py-1 rounded">Plantower PMS7003T (UART)</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // --- LOGIKA MURNI FRONTEND: UTILITY SWITCH SUB-TAB NAVIGATION ---
+        function switchSubTab(targetTab) {
+            const dashboardWrap = document.getElementById('tab-dashboard');
+            const infoWrap = document.getElementById('tab-info');
+
+            if (targetTab === 'info') {
+                dashboardWrap.classList.replace('block', 'hidden');
+                infoWrap.classList.replace('hidden', 'block');
+            } else {
+                dashboardWrap.classList.replace('hidden', 'block');
+                infoWrap.classList.replace('block', 'hidden');
+                loadDashboard(); // me-recalculate ulang chart canvas agar tidak gepeng
+            }
+        }
+
+        // --- ORIGINAL INTEGRATED APP RISK & DATA FETCHING ENGINE ---
+        const SMART_DEVICES = ["19684", "19682"];
+        const SMART_API = "https://api.smartcitizen.me/v0/devices/";
+        const BMKG_API = "https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=";
+
+        const el = {
+            deviceMode: document.getElementById("deviceMode"),
+            adm4Input: document.getElementById("adm4Input"),
+            refreshBtn: document.getElementById("refreshBtn"),
+            avgTemp: document.getElementById("avgTemp"),
+            avgHum: document.getElementById("avgHum"),
+            rainWatch: document.getElementById("rainWatch"),
+            dengueLevel: document.getElementById("dengueLevel"),
+            resilienceScore: document.getElementById("resilienceScore"),
+            riskGrid: document.getElementById("riskGrid"),
+            recommendationBox: document.getElementById("recommendationBox"),
+            bmkgBox: document.getElementById("bmkgBox"),
+            deviceTable: document.getElementById("deviceTable"),
+            sensorChart: document.getElementById("sensorChart")
+        };
+
+        let map;
+        let markers = [];
+
+        function fmt(value) {
+            if (value === null || value === undefined || value === "") return "--";
+            const n = Number(value);
+            return Number.isNaN(n) ? "--" : n.toFixed(2);
+        }
+
+        function avg(values) {
+            const nums = values.filter(v => v !== null && !Number.isNaN(Number(v))).map(Number);
+            if (!nums.length) return null;
+            return nums.reduce((a, b) => a + b, 0) / nums.length;
+        }
+
+        function getSensors(json) {
+            if (json.data && Array.isArray(json.data.sensors)) return json.data.sensors;
+            if (Array.isArray(json.sensors)) return json.sensors;
+            return [];
+        }
+
+        // Modifikasi pencarian metric map berdasarkan parameter fungsionalitas Bosch BME680
+        function sensorText(sensor) {
+            return [
+                sensor.name,
+                sensor.description,
+                sensor.unit,
+                sensor.measurement && sensor.measurement.name,
+                sensor.measurement && sensor.measurement.description
+            ].filter(Boolean).join(" ").toLowerCase();
+        }
+
+        function findSensor(sensors, keywords) {
+            return sensors.find(sensor => {
+                const text = sensorText(sensor);
+                return keywords.some(k => text.includes(k));
+            });
+        }
+
+        function findSensorByMetric(sensors, metric) {
+            if (metric === "temperature") return findSensor(sensors, ["temperature", "air temperature", "°c", "ºc"]);
+            if (metric === "humidity") return findSensor(sensors, ["humidity", "relative humidity"]);
+            return null;
+        }
+
+        function valueOf(sensor) {
+            return sensor ? Number(sensor.value) : null;
+        }
+
+        function getLocation(json) {
+            const loc = json.location || {};
+            const lat = loc.latitude ?? loc.lat ?? loc.geo_lat ?? null;
+            const lon = loc.longitude ?? loc.lng ?? loc.lon ?? loc.geo_lon ?? null;
+
+            return {
+                city: loc.city || "Kabupaten Tangerang",
+                country: loc.country || "Indonesia",
+                latitude: lat !== null ? Number(lat) : null,
+                longitude: lon !== null ? Number(lon) : null
+            };
+        }
+
+        async function fetchSmartDevice(id) {
+            const res = await fetch(SMART_API + id, {
+                method: "GET",
+                mode: "cors",
+                headers: { "Accept": "application/json" }
+            });
+            if (!res.ok) throw new Error("Smart Citizen error " + id);
+
+            const json = await res.json();
+            const sensors = getSensors(json);
+
+            const temp = valueOf(findSensor(sensors, ["temperature", "air temperature", "°c", "ºc"]));
+            const rh = valueOf(findSensor(sensors, ["humidity", "relative humidity"]));
+            const iaq = valueOf(findSensor(sensors, ["iaq", "air quality", "air-freshness"]));
+            const pressure = valueOf(findSensor(sensors, ["pressure", "barometric"]));
+
+            return {
+                id,
+                name: json.name || "Device " + id,
+                state: json.state || "-",
+                update: json.last_recorded_at ? new Date(json.last_recorded_at).toLocaleString("id-ID") : "-",
+                location: getLocation(json),
+                temp, rh, iaq, pressure
+            };
+        }
+
+        async function fetchBmkg(adm4) {
+            const res = await fetch(BMKG_API + encodeURIComponent(adm4));
+            if (!res.ok) throw new Error("BMKG API error");
+            return await res.json();
+        }
+
+        function flattenWeather(json) {
+            const rows = [];
+            function walk(node) {
+                if (Array.isArray(node)) {
+                    node.forEach(walk);
+                } else if (node && typeof node === "object") {
+                    if (node.local_datetime || node.utc_datetime || node.weather_desc || node.weather_desc_en || node.t !== undefined || node.hu !== undefined) {
+                        rows.push(node);
+                    }
+                    Object.values(node).forEach(walk);
+                }
+            }
+            walk(json);
+            return rows;
+        }
+
+        function analyzeBmkg(json) {
+            const rows = flattenWeather(json).slice(0, 24);
+            const rainRows = rows.filter(r => {
+                const w = String(r.weather_desc || r.weather_desc_en || "").toLowerCase();
+                return w.includes("hujan") || w.includes("rain");
+            });
+            const humidRows = rows.filter(r => Number(r.hu) >= 70);
+
+            return {
+                rows,
+                rainCount: rainRows.length,
+                humidCount: humidRows.length,
+                avgTemp: avg(rows.map(r => Number(r.t))),
+                avgHum: avg(rows.map(r => Number(r.hu)))
+            };
+        }
+
+        function computeRisk(devices, bmkg) {
+            const sensorTemp = avg(devices.map(d => d.temp));
+            const sensorRh = avg(devices.map(d => d.rh));
+
+            let dengueScore = 0;
+            if (sensorTemp !== null && sensorTemp >= 25 && sensorTemp <= 30) dengueScore += 2;
+            else if (sensorTemp !== null && sensorTemp >= 24 && sensorTemp <= 34) dengueScore += 1;
+
+            if (sensorRh !== null && sensorRh >= 70) dengueScore += 2;
+            else if (sensorRh !== null && sensorRh >= 60) dengueScore += 1;
+
+            if (bmkg.rainCount >= 3) dengueScore += 2;
+            else if (bmkg.rainCount >= 1) dengueScore += 1;
+
+            if (bmkg.humidCount >= 6) dengueScore += 1;
+
+            const dengue = dengueScore >= 5 ? "HIGH" : dengueScore >= 3 ? "MEDIUM" : "LOW";
+            const mold = sensorRh !== null && sensorRh > 70 ? "HIGH" : sensorRh !== null && sensorRh >= 60 ? "MEDIUM" : "LOW";
+            const malaria = sensorTemp !== null && sensorTemp >= 24 && sensorTemp <= 32 && sensorRh !== null && sensorRh >= 70 && bmkg.rainCount >= 3 ? "MEDIUM" : "LOW";
+
+            const iaqAvg = avg(devices.map(d => d.iaq));
+            const air = iaqAvg !== null && iaqAvg > 200 ? "HIGH" : iaqAvg !== null && iaqAvg > 100 ? "MEDIUM" : "LOW";
+
+            let score = 100;
+            if (dengue === "HIGH") score -= 25;
+            if (dengue === "MEDIUM") score -= 12;
+            if (mold === "HIGH") score -= 20;
+            if (mold === "MEDIUM") score -= 10;
+            if (air === "HIGH") score -= 20;
+            if (air === "MEDIUM") score -= 10;
+            if (bmkg.rainCount >= 3) score -= 10;
+
+            score = Math.max(0, Math.min(100, score));
+            return { dengue, mold, malaria, air, sensorTemp, sensorRh, score };
+        }
+
+        function riskClass(level) {
+            if (level === "LOW") return "low";
+            if (level === "MEDIUM") return "medium";
+            return "high";
+        }
+
+        function riskCard(title, level, text) {
+            return `
+                <div class="risk ${riskClass(level)} p-5 rounded-2xl flex flex-col justify-between shadow-sm transition-shadow hover:shadow-md">
+                    <div>
+                        <h3 class="text-sm font-bold tracking-tight mb-1 text-on-surface">${title}</h3>
+                        <div class="level inline-block px-3 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-3">${level}</div>
+                        <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">${text}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderRisk(risk, bmkg) {
+            el.riskGrid.innerHTML = `
+                ${riskCard("Dengue / DBD Early Warning", risk.dengue, risk.dengue === "HIGH" ? "Kombinasi suhu, kelembapan, dan potensi hujan mendukung kewaspadaan tinggi DBD. Perkuat PSN 3M Plus dalam 7–10 hari ke depan." : risk.dengue === "MEDIUM" ? "Kondisi cukup mendukung vektor DBD. Lakukan pemeriksaan genangan dan edukasi warga." : "Kondisi saat ini belum menunjukkan kombinasi risiko tinggi DBD.")}
+                ${riskCard("Malaria Environmental Watch", risk.malaria, "Indikator ini bukan deteksi malaria. Digunakan sebagai kewaspadaan lingkungan berbasis suhu, kelembapan, dan hujan, terutama untuk kasus impor atau wilayah reseptif.")}
+                ${riskCard("Mold & Respiratory Health", risk.mold, risk.mold === "HIGH" ? "RH rata-rata tinggi. Tingkatkan ventilasi, cek area lembap, kamar tidur, pakaian, dinding, dan ruang tertutup." : risk.mold === "MEDIUM" ? "RH berada pada zona pantau. Perhatikan ruangan tertutup dan waktu malam hari." : "RH relatif terkendali untuk risiko mold.")}
+                ${riskCard("Indoor Air Freshness", risk.air, risk.air === "HIGH" ? "IAQ/VOC proxy menunjukkan kualitas kesegaran udara kurang baik. Cek sumber VOC seperti memasak, pembersih, dupa, atau ventilasi buruk." : risk.air === "MEDIUM" ? "IAQ perlu dipantau sebagai indikator kesegaran udara dalam ruang." : "IAQ relatif masih dalam kondisi baik.")}
+                ${riskCard("Rainfall & Urban Resilience", bmkg.rainCount >= 3 ? "MEDIUM" : "LOW", bmkg.rainCount >= 3 ? "Prakiraan hujan muncul pada beberapa slot. Perlu perhatian pada drainase, genangan, dan tempat perkembangbiakan nyamuk." : "Belum banyak slot prakiraan hujan yang terdeteksi.")}
+                ${riskCard("Urban Resilience Score", risk.score < 60 ? "HIGH" : risk.score < 80 ? "MEDIUM" : "LOW", "Skor ketahanan lingkungan hari ini: " + risk.score + "/100. Semakin tinggi skor, semakin baik kondisi lingkungan dan kesiapsiagaan.")}
+            `;
+        }
+
+        function renderRecommendation(risk, bmkg) {
+            const items = [];
+            if (risk.dengue === "HIGH") {
+                items.push("Prioritaskan PSN 3M Plus: menguras, menutup, mendaur ulang/mengubur barang bekas, dan memeriksa talang, pot tanaman, ember, dispenser, serta wadah air.");
+                items.push("Gunakan prakiraan hujan sebagai pengingat pemeriksaan genangan selama 7–10 hari berikutnya.");
+                items.push("Koordinasikan surveilans jentik, edukasi warga, dan pemantauan wilayah sekitar node sensor dengan RH tinggi.");
+            } else if (risk.dengue === "MEDIUM") {
+                items.push("Lakukan pemeriksaan genangan air secara berkala dan perkuat edukasi PSN 3M Plus.");
+            }
+            if (risk.mold !== "LOW") items.push("Untuk mold dan kesehatan pernapasan: buka ventilasi saat kelembapan turun, gunakan exhaust fan/dehumidifier, dan cek area lembap di kamar tidur.");
+            if (risk.air !== "LOW") items.push("Untuk IAQ/VOC: tingkatkan ventilasi, cek aktivitas memasak, pembersih, dupa, cat, atau furnitur baru yang dapat meningkatkan VOC.");
+            if (bmkg.rainCount > 0) items.push("BMKG menunjukkan indikasi hujan pada beberapa slot prakiraan. Perkuat pembersihan saluran, wadah air terbuka, dan titik genangan.");
+            items.push("Dashboard ini hanya indikator kewaspadaan lingkungan. Keputusan kesehatan publik tetap mengikuti arahan Dinas Kesehatan dan surveilans resmi.");
+
+            el.recommendationBox.innerHTML = "<ol class='list-decimal pl-4 space-y-1.5'>" + items.map(i => `<li>${i}</li>`).join("") + "</ol>";
+        }
+
+        async function renderDevices(devices) {
+        el.deviceTable.innerHTML = devices.map(d => {
+            const online = d.state === "online" || d.state === "has_published";
+            const coord = d.location.latitude !== null && d.location.longitude !== null
+                ? `${fmt(d.location.latitude)}, ${fmt(d.location.longitude)}` : '-';
+            return `
+                <tr class="hover:bg-surface-container-low/50 transition-colors" id="row-${d.id}">
+                    <td class="px-5 py-3.5"><span class="font-bold text-on-surface">${d.name}</span><br><span class="text-xs text-outline font-mono">${d.id}</span></td>
+                    <td class="px-5 py-3.5"><span class="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-container border border-primary/20">${online ? 'ONLINE' : 'OFFLINE'}</span></td>
+                    <td class="px-5 py-3.5 font-mono font-semibold">${fmt(d.temp)} °C</td>
+                    <td class="px-5 py-3.5 font-mono font-semibold">${fmt(d.rh)} %</td>
+                    <td class="px-5 py-3.5 font-mono">${fmt(d.iaq)}</td>
+                    <td class="px-5 py-3.5 text-xs">${coord}</td>
+                    <td class="px-5 py-3.5 text-xs">${d.update}</td>
+                    <td class="px-5 py-3.5 text-xs text-on-surface-variant max-w-[260px]" id="ai-${d.id}">
+                        <div class="flex items-center gap-1.5 text-outline animate-pulse">
+                            <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                            Menganalisis...
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        for (const d of devices) {
+            const analysis = await geminiWithDelay(d);
+            const cell = document.getElementById(`ai-${d.id}`);
+            if (cell) {
+                cell.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-1 text-[10px] font-bold text-primary mb-1">
+                            <span class="material-symbols-outlined text-xs">auto_awesome</span> AI Analysis
+                        </div>
+                        <p class="text-[11px] sm:text-xs leading-relaxed text-on-surface-variant">${analysis}</p>
+                    </div>
+                `;
+            }
+        }
+    }
+
+        function initMap() {
+            if (map) return;
+            map = L.map("map").setView([-6.18, 106.63], 11);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19, attribution: "&copy; OpenStreetMap"
+            }).addTo(map);
+        }
+
+        function renderMap(devices) {
+            initMap();
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+
+            const valid = devices.filter(d => d.location.latitude !== null && d.location.longitude !== null);
+            valid.forEach(d => {
+                const marker = L.marker([d.location.latitude, d.location.longitude])
+                    .addTo(map)
+                    .bindPopup(`<strong>${d.name}</strong><br>Device ID: ${d.id}<br>Temp: ${fmt(d.temp)} °C<br>RH: ${fmt(d.rh)} %<br>IAQ: ${fmt(d.iaq)}`);
+                markers.push(marker);
+            });
+
+            if (valid.length) {
+                const group = L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(.25));
+            }
+        }
+
+        function renderBmkg(bmkg) {
+            const rows = bmkg.rows.slice(0, 8);
+            if (!rows.length) {
+                el.bmkgBox.innerHTML = "<div class='text-error font-semibold'>Data BMKG belum terbaca. Periksa kode ADM4.</div>";
+                return;
+            }
+
+            el.bmkgBox.innerHTML = `
+                <div class="space-y-3">
+                    <p class="font-bold text-primary text-sm flex items-center gap-1"><span class="material-symbols-outlined text-sm">cloud_sync</span> Ringkasan BMKG:</p>
+                    <div class="text-xs sm:text-sm space-y-1 bg-surface-container/40 p-3 rounded-xl border border-outline-variant/30 font-medium">
+                        <p>Rata-rata Suhu: <b class="text-on-surface">${fmt(bmkg.avgTemp)} °C</b></p>
+                        <p>Rata-rata Kelembapan: <b class="text-on-surface">${fmt(bmkg.avgHum)} %</b></p>
+                        <p>Slot Indikasi Hujan: <b class="text-primary">${bmkg.rainCount} slot</b></p>
+                        <p>Slot Kelembapan Tinggi (≥70%): <b class="text-secondary">${bmkg.humidCount} slot</b></p>
+                    </div>
+                    <p class="font-bold text-on-surface text-xs sm:text-sm border-t border-outline-variant/40 pt-2">Timeline Cuaca Terdekat:</p>
+                    <div class="text-[11px] sm:text-xs font-mono space-y-1.5 opacity-90 overflow-y-auto max-h-[160px] pr-1">
+                        ${rows.map(r => `<div>• ${r.local_datetime || r.utc_datetime || "-"} | ${r.weather_desc || r.weather_desc_en || "-"} | ${r.t ?? "-"}°C | RH ${r.hu ?? "-"}%</div>`).join("")}
+                    </div>
+                </div>
+            `;
+        }
+
+        function drawSensorChart(devices) {
+            const canvas = el.sensorChart;
+            const ctx = canvas.getContext("2d");
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+            const values = [...devices.map(d => d.temp), ...devices.map(d => d.rh)].filter(v => v !== null && !Number.isNaN(v));
+
+            if (!values.length) {
+                ctx.fillStyle = "#6b7280"; ctx.font = "14px Inter, Arial";
+                ctx.fillText("Data sensor belum tersedia untuk chart.", 40, 60);
+                return;
+            }
+
+            const maxValue = Math.max(100, ...values);
+            const left = 60, top = 45, bottom = 55, right = 30;
+            const chartW = w - left - right;
+            const chartH = h - top - bottom;
+            const groupW = chartW / devices.length;
+            const barW = Math.min(44, groupW / 4);
+
+            ctx.strokeStyle = "#f0eded"; ctx.lineWidth = 1;
+
+            for (let i = 0; i <= 5; i++) {
+                const y = top + chartH * i / 5;
+                ctx.beginPath(); ctx.moveTo(left, y); ctx.lineTo(w - right, y); ctx.stroke();
+                const label = maxValue - maxValue * i / 5;
+                ctx.fillStyle = "#424941"; ctx.font = "11px font-mono, Arial";
+                ctx.fillText(label.toFixed(0), 24, y + 4);
+            }
+
+            devices.forEach((d, i) => {
+                const x = left + groupW * i + groupW / 2;
+                const tempH = d.temp !== null ? (d.temp / maxValue) * chartH : 0;
+                const rhH = d.rh !== null ? (d.rh / maxValue) * chartH : 0;
+
+                ctx.fillStyle = "#416744"; // Mengubah palet warna bar chart ke warna SensorKita primary
+                ctx.fillRect(x - barW - 6, top + chartH - tempH, barW, tempH);
+
+                ctx.fillStyle = "#695d46"; // Mengubah ke warna SensorKita secondary
+                ctx.fillRect(x + 6, top + chartH - rhH, barW, rhH);
+
+                ctx.fillStyle = "#1b1c1c"; ctx.font = "bold 12px Plus Jakarta Sans, Arial";
+                ctx.fillText(d.id, x - 18, h - 24);
+            });
+
+            // Legend indicators
+            ctx.fillStyle = "#416744"; ctx.fillRect(w - 265, 18, 12, 12);
+            ctx.fillStyle = "#1b1c1c"; ctx.font = "12px Inter, Arial";
+            ctx.fillText("Temperature °C", w - 247, 28);
+
+            ctx.fillStyle = "#695d46"; ctx.fillRect(w - 135, 18, 12, 12);
+            ctx.fillStyle = "#1b1c1c"; ctx.fillText("Humidity %", w - 117, 28);
+        }
+
+        async function loadDashboard() {
+            try {
+                el.deviceTable.innerHTML = `<tr><td colspan="7" class="p-5"><div class="p-3 bg-orange-50 text-amber-800 rounded-xl font-semibold">Memuat data sensor...</div></td></tr>`;
+                el.riskGrid.innerHTML = `<div class="p-4 bg-orange-50 text-amber-800 border border-orange-200 font-bold rounded-2xl text-sm">Menghitung matriks risiko...</div>`;
+                el.bmkgBox.innerHTML = "Mengambil data prakiraan BMKG...";
+
+                const selected = el.deviceMode.value;
+                const deviceIds = selected === "all" ? SMART_DEVICES : [selected];
+
+                const smartResults = await Promise.allSettled(deviceIds.map(fetchSmartDevice));
+                const devices = smartResults.filter(r => r.status === "fulfilled").map(r => r.value);
+
+                const bmkgJson = await fetchBmkg(el.adm4Input.value.trim());
+                const bmkg = analyzeBmkg(bmkgJson);
+                const risk = computeRisk(devices, bmkg);
+
+                el.avgTemp.textContent = fmt(risk.sensorTemp);
+                el.avgHum.textContent = fmt(risk.sensorRh);
+                el.rainWatch.textContent = bmkg.rainCount;
+                el.dengueLevel.textContent = risk.dengue;
+                el.resilienceScore.textContent = risk.score;
+
+                await renderDevices(devices);
+                renderMap(devices);
+                renderBmkg(bmkg);
+                renderRisk(risk, bmkg);
+                renderRecommendation(risk, bmkg);
+                drawSensorChart(devices);
+
+            } catch (error) {
+                console.error(error);
+                el.riskGrid.innerHTML = `<div class="p-4 bg-red-50 text-red-800 border border-red-200 font-bold rounded-2xl text-sm lg:col-span-3">Dashboard gagal dimuat. Periksa koneksi API internet Anda atau kode ADM4 BMKG.</div>`;
+                el.bmkgBox.innerHTML = "<div class='text-error font-semibold'>Gagal menyinkronkan data prakiraan cuaca spasial.</div>";
+            }
+        }
+        
+        
+
+
+        const GEMINI_KEY = 'AQ.Ab8RN6K0y1Tp6TrxeGmcbKVGaEo_AMASBxCxuY3JFRmOr48r5w';
+        const GEMINI_API = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
+        const aiCache = {};
+        let aiLastCall = 0;
+
+        async function geminiWithDelay(device) {
+            const now = Date.now();
+            const timeSinceLast = now - aiLastCall;
+            // Tunggu minimal 4 detik antar request (max 15/menit = 1 per 4 detik)
+            if (timeSinceLast < 4000) {
+                await new Promise(r => setTimeout(r, 4000 - timeSinceLast));
+            }
+            aiLastCall = Date.now();
+            return analyzeDeviceAI(device);
+        }   
+
+        async function analyzeDeviceAI(device) {
+            const cacheKey = `ai_${device.id}_${fmt(device.temp)}_${fmt(device.rh)}`;
+            
+            // Cek localStorage dulu
+            const cached = localStorage.getItem(cacheKey);
+            if (cached) return cached;
+
+            // Cek memory cache
+            if (aiCache[cacheKey]) return aiCache[cacheKey];
+
+            try {
+                const prompt = `Kamu adalah analis lingkungan hidup untuk Kabupaten Tangerang. Berikan analisis singkat (2-3 kalimat) dalam Bahasa Indonesia berdasarkan data sensor berikut:
+        - Suhu: ${fmt(device.temp)} °C
+        - Kelembapan: ${fmt(device.rh)} %
+        - IAQ/VOC Index: ${fmt(device.iaq)}
+        - Tekanan Udara: ${fmt(device.pressure)} hPa
+        - Lokasi: ${device.location.city}
+
+        Sebutkan kondisi udara saat ini, potensi risiko kesehatan atau lingkungan, dan satu saran praktis. Jawab langsung tanpa pembuka atau salam.`;
+
+                const response = await fetch(GEMINI_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { maxOutputTokens: 200, temperature: 0.4 }
+                    })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    console.error('Gemini error:', err);
+                    return 'Analisis tidak tersedia saat ini.';
+                }
+
+                const data = await response.json();
+                const result = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Analisis tidak tersedia.';
+
+                // Simpan ke memory dan localStorage
+                aiCache[cacheKey] = result;
+                try { localStorage.setItem(cacheKey, result); } catch(e) {}
+
+                return result;
+
+            } catch (e) {
+                console.error('analyzeDeviceAI error:', e);
+                return 'Gagal mengambil analisis AI.';
+            }
+        }        
+        
+
+        el.refreshBtn.addEventListener("click", loadDashboard);
+        el.deviceMode.addEventListener("change", loadDashboard);
+        document.addEventListener("DOMContentLoaded", loadDashboard);
+        setInterval(loadDashboard, 300000);
+    </script>
+
+    <script src="../js/main.js"></script>
+
+    
+    
+</body>
+<script>
+// Set active nav based on current page
+function setActiveNav() {
+    const currentPage = window.location.pathname.split('/').pop() || 'data.html';
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active-page', 'text-primary', 'border-b-2', 'border-primary');
+        link.classList.add('text-on-surface-variant');
+        link.removeAttribute('aria-current');
+        
+        if (link.getAttribute('href') === currentPage || 
+            (currentPage === '' && link.getAttribute('href') === 'data.html')) {
+            link.classList.add('active-page', 'text-primary', 'border-b-2', 'border-primary');
+            link.classList.remove('text-on-surface-variant');
+            link.setAttribute('aria-current', 'page');
+        }
+    });
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', setActiveNav);
+</script>
+
+</html>
