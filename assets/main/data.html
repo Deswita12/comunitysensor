@@ -91,7 +91,13 @@
                     title="FAQ">help</a>
                 <span onclick="openSettings()"
                     class="material-symbols-outlined text-on-surface-variant cursor-pointer p-1 rounded-full hover:bg-surface-container transition-colors">settings</span>
-                <!-- Hubungi Kami — WhatsApp -->
+                <!-- Tambahkan ini setelah icon settings, SEBELUM tutup div -->
+                <button id="hamburger-btn"
+                    class="md:hidden flex items-center p-1 rounded-full text-on-surface-variant hover:bg-surface-container transition-colors"
+                    aria-label="Toggle menu" aria-expanded="false">
+                    <span class="material-symbols-outlined" id="hamburger-icon">menu</span>
+                </button>
+                    <!-- Hubungi Kami — WhatsApp -->
                 <a href="https://wa.me/6287775881409" target="_blank" rel="noopener noreferrer"
                     class="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity text-sm font-label-caps">
                     <span class="material-symbols-outlined text-base">chat</span>
@@ -124,6 +130,8 @@
                 <div>
                 <a class="font-label-caps text-primary py-2 border-b border-outline-variant nav-link active-page"
                     href="panduan.html" data-page="panduan">Panduan</a>
+                </div>
+                <div>
                 <a class="font-label-caps text-on-surface-variant hover:text-primary py-2 nav-link"
                     href="komunitas.html" data-page="komunitas">Komunitas</a>
                 </div>
@@ -934,6 +942,42 @@
         el.deviceMode.addEventListener("change", loadDashboard);
         document.addEventListener("DOMContentLoaded", loadDashboard);
         setInterval(loadDashboard, 300000);
+    </script>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu  = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const mobileDataBtn = document.getElementById('mobile-data-btn');
+        const mobileDataSub = document.getElementById('mobile-data-sub');
+        const mobileDataArrow = document.getElementById('mobile-data-arrow');
+
+        // Toggle menu utama
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden', isOpen);
+            mobileMenu.classList.toggle('flex', !isOpen);
+            hamburgerIcon.textContent = isOpen ? 'menu' : 'close';
+            hamburgerBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        // Toggle submenu Data
+        mobileDataBtn.addEventListener('click', () => {
+            const isOpen = !mobileDataSub.classList.contains('hidden');
+            mobileDataSub.classList.toggle('hidden', isOpen);
+            mobileDataSub.classList.toggle('flex', !isOpen);
+            mobileDataArrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+        });
+
+        // Tutup menu saat klik di luar
+        document.addEventListener('click', (e) => {
+            if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+            hamburgerIcon.textContent = 'menu';
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
     </script>
 
     <script src="../js/main.js"></script>

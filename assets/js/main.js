@@ -316,6 +316,10 @@ function toggleFaq(btn) {
 // ===================== SWITCH SUB TAB =====================
 function switchSubTab(tab) {
     const currentPage = window.location.pathname.split('/').pop();
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'info') {
+        switchSubTab('info'); // panggil fungsi yang sudah ada
+    }
 
     if (currentPage === 'data.html') {
         const dashboardWrap = document.getElementById('tab-dashboard');
@@ -337,6 +341,13 @@ function switchSubTab(tab) {
 // ===================== DOM READY (SATU BLOK SAJA) =====================
 document.addEventListener('DOMContentLoaded', () => {
 
+    
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+
+    if (tab === 'info') {
+        switchSubTab('info');
+    }
     // --- Mobile Menu ---
     const menuBtn    = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -370,18 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Dropdown Mobile ---
-    const mobileDataBtn = document.getElementById('mobile-data-btn');
-    const mobileDataSub = document.getElementById('mobile-data-sub');
-    const mobileArrow   = document.getElementById('mobile-data-arrow');
-
-    if (mobileDataBtn && mobileDataSub) {
-        mobileDataBtn.addEventListener('click', () => {
-            const isOpen = !mobileDataSub.classList.contains('hidden');
-            mobileDataSub.classList.toggle('hidden', isOpen);
-            if (mobileArrow) mobileArrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-        });
-    }
 
 });
 

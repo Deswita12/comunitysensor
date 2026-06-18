@@ -120,7 +120,7 @@
 
             <div class="flex items-center gap-2">
                 <span class="font-display-lg text-headline-md text-primary tracking-tight cursor-pointer"
-                       onclick="window.location.href='../../index.html'">SensorKita</span>
+                       onclick="window.location.href='../assets/main/panduan.html'">SensorKita</span>
             </div>
 
             <nav class="hidden md:flex items-center gap-6">
@@ -133,7 +133,7 @@
                     </button>
                     <div id="desktop-dropdown"
                         class="absolute left-0 mt-1 w-48 bg-surface rounded-xl shadow-lg border border-outline-variant py-2 hidden z-50">
-                        <button onclick="window.location.href='data.html'"
+                        <button onclick="window.location.href='../data.html'"
                             class="w-full text-left px-4 py-2 text-sm font-label-caps text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all">
                             Dashboard
                         </button>
@@ -157,7 +157,14 @@
                     title="FAQ">help</a>
                 <span onclick="openSettings()"
                     class="material-symbols-outlined text-on-surface-variant cursor-pointer p-1 rounded-full hover:bg-surface-container transition-colors">settings</span>
-                <!-- Hubungi Kami — WhatsApp -->
+                <!-- Tambahkan ini setelah icon settings, SEBELUM tutup div -->
+                <button id="hamburger-btn"
+                    class="md:hidden flex items-center p-1 rounded-full text-on-surface-variant hover:bg-surface-container transition-colors"
+                    aria-label="Toggle menu" aria-expanded="false">
+                    <span class="material-symbols-outlined" id="hamburger-icon">menu</span>
+                </button>
+                
+                    <!-- Hubungi Kami — WhatsApp -->
                 <a href="https://wa.me/6287775881409" target="_blank" rel="noopener noreferrer"
                     class="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity text-sm font-label-caps">
                     <span class="material-symbols-outlined text-base">chat</span>
@@ -167,7 +174,7 @@
 
         
 <div id="mobile-menu"
-    class="absolute top-16 left-0 right-0 bg-surface border-b border-outline-variant shadow-md p-4 hidden flex-col gap-4 md:hidden z-50">
+    class="absolute top-16 left-0 right-0 bg-surface border-b border-outline-variant shadow-md p-4 hidden flex-col gap-4 md:hidden z-50 hidden">
                 <div>
                     <button id="mobile-data-btn"
                         class="w-full flex justify-between items-center font-label-caps text-on-surface-variant py-2">
@@ -177,11 +184,11 @@
                     </button>
                     <div id="mobile-data-sub"
                         class="hidden pl-4 flex flex-col gap-2 mt-1 border-l-2 border-outline-variant">
-                        <button onclick="window.location.href='data.html'"
+                        <button onclick="window.location.href='assets/main/data.html'"
                             class="text-left font-label-caps text-sm text-on-surface-variant hover:text-primary py-2">
                             Dashboard
                         </button>
-                        <button onclick="switchSubTab('info')"
+                        <button onclick="window.location.href='../assets/main/data.html?tab=info'"
                             class="w-full text-left px-4 py-2 text-sm font-label-caps text-primary hover:bg-surface-container transition-all">
                             Info
                         </button>
@@ -190,6 +197,8 @@
                 <div>
                 <a class="font-label-caps text-primary py-2 border-b border-outline-variant nav-link active-page"
                     href="assets/main/panduan.html" data-page="panduan">Panduan</a>
+                </div>
+                <div>
                 <a class="font-label-caps text-on-surface-variant hover:text-primary py-2 nav-link"
                     href="assets/main/komunitas.html" data-page="komunitas">Komunitas</a>
                 </div>
@@ -215,7 +224,7 @@
                             onclick="scrollToWizard()">
                             Mulai Merakit Sekarang <span class="material-symbols-outlined">arrow_downward</span>
                         </button>
-                        <a href="data.html"
+                        <a href="assets/main/data.html"
                             class="border-2 border-primary text-primary font-label-caps px-8 py-4 rounded-full hover:bg-primary-container/10 transition-colors w-full sm:w-auto justify-center flex items-center">
                             Pelajari Lebih Lanjut
                         </a>
@@ -326,6 +335,38 @@
                                 <p class="text-xs text-on-surface-variant">Untuk transfer kode & daya</p>
                             </div>
                         </div>
+                        <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary flex-shrink-0">
+                                <span class="material-symbols-outlined">cable</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm sm:text-base">Kabel jumper 22 AWG</p>
+                                <p class="text-xs text-on-surface-variant">Menghubungkan jalur listrik antar komponen
+                                </p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary flex-shrink-0">
+                                <span class="material-symbols-outlined">apps</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm sm:text-base">Breadboard </p>
+                                <p class="text-xs text-on-surface-variant">Papan prototipe untuk merangkai komponen
+                                    tanpa solder</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary flex-shrink-0">
+                                <span class="material-symbols-outlined">hardware</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm sm:text-base">Solder & Timah</p>
+                                <p class="text-xs text-on-surface-variant">Merekatkan kaki komponen secara permanen</p>
+                            </div>
+                        </div>
                         <div class="p-4 bg-surface border border-outline-variant rounded-xl flex items-center gap-4 opacity-40 grayscale"
                             id="plus-item">
                             <div
@@ -333,7 +374,7 @@
                                 <span class="material-symbols-outlined">screenshot_monitor</span>
                             </div>
                             <div>
-                                <p class="font-bold text-sm sm:text-base">OLED Display 0.96"</p>
+                                <p class="font-bold text-sm sm:text-base">Sensor PM2.5 laser Seeed Grove HM3301"</p>
                                 <p class="text-xs text-on-surface-variant">Hanya untuk Paket Plus</p>
                             </div>
                         </div>
@@ -359,24 +400,27 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="bg-surface-bright p-4 rounded-xl border-l-4 border-secondary shadow-sm">
-                            <h4 class="font-bold text-secondary mb-1 text-sm sm:text-base">2. Video Tutorial Instalasi</h4>
-                            <div class="aspect-video bg-surface-dim rounded-lg overflow-hidden">
-                                <video class="w-full h-full" controls playsinline preload="metadata">
-                                    <source src="../img/vidio/testing.mp4" type="video/mp4">
-                                </video>
-                            </div>
-                        </div>
-                        <!-- Video Tutorial: Plus -->
-                        <div id="video-plus" class="hidden bg-surface-bright p-4 rounded-xl border-l-4 border-secondary shadow-sm">
-                            <h4 class="font-bold text-secondary mb-1 text-sm sm:text-base">2. Video Tutorial Instalasi</h4>
-                            <p class="text-xs text-on-surface-variant mb-2">Untuk Paket Plus</p>
-                            <div class="aspect-video bg-surface-dim rounded-lg overflow-hidden">
-                                <video class="w-full h-full" controls playsinline preload="metadata">
-                                    <source src="../img/vidio/testing.mp4" type="video/mp4">
-                                </video>
-                            </div>
-                        </div>
+             <!-- Video Tutorial: Basic -->
+                <div id="video-basic" class="bg-surface-bright p-4 rounded-xl border-l-4 border-secondary shadow-sm">
+                    <h4 class="font-bold text-secondary mb-1 text-sm sm:text-base">2. Video Tutorial Instalasi</h4>
+                    <p class="text-xs text-on-surface-variant mb-2">Untuk Paket Basic</p>
+                    <div class="aspect-video bg-surface-dim rounded-lg overflow-hidden">
+                        <video class="w-full h-full" controls playsinline preload="metadata">
+                            <source src="../img/vidio/Cuplikan_IoT.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Video Tutorial: Plus -->
+                <div id="video-plus" class="hidden bg-surface-bright p-4 rounded-xl border-l-4 border-secondary shadow-sm">
+                    <h4 class="font-bold text-secondary mb-1 text-sm sm:text-base">2. Video Tutorial Instalasi</h4>
+                    <p class="text-xs text-on-surface-variant mb-2">Untuk Paket Plus</p>
+                    <div class="aspect-video bg-surface-dim rounded-lg overflow-hidden">
+                        <video class="w-full h-full" controls playsinline preload="metadata">
+                            <source src="../img/vidio/Cuplikan_IoT.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
                     </div>
                 </div>
 
@@ -658,7 +702,7 @@ void loop() {
                 <img alt="Coding Cat Tips" class="w-12 h-12 rounded-full flex-shrink-0"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvp-CyD3nb4-rWzdtosJpRjOcfFIEWYdpFKbz-tcOFegoB5-qNbiQl9ycoJ4Ml1wYcgePPB5MDSD1NvXqNDgbTCZe-gaZGmcQolLRrXMY98bO7wGngfNLCSyNULe52LSADexPOX3TxtqGrRtQRv_7irHzmCG7WpOYIJH097gQqDeH1-Vz1Q6qpB0FIERoKgVb_vGAQ2O0y9YcVGkQXJvqeCydtQA2BBFkJIqUHvbtEehTpnzsXdoTO5rT6gA8r6z6aiVEhG4eNnA" />
                 <div>
-                    <h5 class="font-bold text-primary mb-1 text-sm sm:text-base">Tips dari Kiki:</h5>
+                    <h5 class="font-bold text-primary mb-1 text-sm sm:text-base">Tips dari Oyen:</h5>
                     <p class="text-xs sm:text-sm text-on-surface-variant" id="dynamic-tip">Selalu simpan kabel cadangan
                         di dekatmu, siapa tahu yang satu macet!</p>
                 </div>
@@ -887,16 +931,52 @@ void loop() {
             </div>
         </div>
     </footer>
-    <script src="../js/main.js"></script>
+    <script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu  = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const mobileDataBtn = document.getElementById('mobile-data-btn');
+        const mobileDataSub = document.getElementById('mobile-data-sub');
+        const mobileDataArrow = document.getElementById('mobile-data-arrow');
+
+        // Toggle menu utama
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden', isOpen);
+            mobileMenu.classList.toggle('flex', !isOpen);
+            hamburgerIcon.textContent = isOpen ? 'menu' : 'close';
+            hamburgerBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        // Toggle submenu Data
+        mobileDataBtn.addEventListener('click', () => {
+            const isOpen = !mobileDataSub.classList.contains('hidden');
+            mobileDataSub.classList.toggle('hidden', isOpen);
+            mobileDataSub.classList.toggle('flex', !isOpen);
+            mobileDataArrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+        });
+
+        // Tutup menu saat klik di luar
+        document.addEventListener('click', (e) => {
+            if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+            hamburgerIcon.textContent = 'menu';
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    </script>
+    <script src="assets/js/main.js"></script>
+    <script>
+    function toggleSteps(id, btn) {
+        const el = document.getElementById(id);
+        const icon = document.getElementById('icon-' + id);
+        const isOpen = !el.classList.contains('hidden');
+        el.classList.toggle('hidden', isOpen);
+        icon.textContent = isOpen ? '▶' : '▼';
+    }
+    </script>
 </body>
-<script>
-function toggleSteps(id, btn) {
-    const el = document.getElementById(id);
-    const icon = document.getElementById('icon-' + id);
-    const isOpen = !el.classList.contains('hidden');
-    el.classList.toggle('hidden', isOpen);
-    icon.textContent = isOpen ? '▶' : '▼';
-}
-</script>
+
 
 </html>
